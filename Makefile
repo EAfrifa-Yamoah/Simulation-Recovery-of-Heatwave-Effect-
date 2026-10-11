@@ -19,4 +19,4 @@ test:
 	NOT_CRAN=true Rscript -e 'testthat::test_dir("tests/testthat", reporter = "summary")'
 
 clean:
-	rm -rf results/parts results/*.rds results/*.csv results/tables results/manuscript_build.md results/run.log
+	rm -rf results/parts results/*.rds results/*.csv results/tables results/run.log
