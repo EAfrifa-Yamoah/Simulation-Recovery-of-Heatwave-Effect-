@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it using the metadata from this file."
+type: software
+title: "Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marineheatwave impacts on fished populations from catch per unit effort"
+authors:
+  - family-names: Awuah-Mensah
+    given-names: Yaw Kwaafo
+    email: y.awuahmensah@ecu.edu.au
+    orcid: https://orcid.org/0009-0002-7893-0948
+  - family-names: Afrifa-Yamoah
+    given-names: Eben
+    email: e.afrifayamoah@ecu.edu.au
+    orcid: https://orcid.org/0000-0003-1741-9249
+doi: 10.5281/zenodo.23293721
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23293721
+    description: "Zenodo concept DOI, resolves to the latest version"
+version: 1.0.1
+date-released: 2026-10-11
+repository-code: https://github.com/EAfrifa-Yamoah/Simulation-Recovery-of-Heatwave-Effect-
+license: MIT
+keywords:
+  - marine heatwave
+  - catch per unit effort
+  - catchability
+  - availability
+  - identifiability
+  - operating model
+  - simulation
+  - survey design
