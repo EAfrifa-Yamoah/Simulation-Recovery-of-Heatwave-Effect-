@@ -11,14 +11,14 @@ A simulation framework for attributing marine heatwave impacts on fished populat
 
 If you use this code, please cite it as:
 
-Afrifa-Yamoah, E. and Awuah-Mensah, Y. K. (2026). Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort (Version 1.0.0). Zenodo. https://doi.org/10.5281/zenodo.23293722
+Awuah-Mensah, Y. K., & Afrifa-Yamoah, E. (2026). Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marineheatwave impacts on fished populations from catch per unit effort (Version v1.0.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.23293722
 
 ```bibtex
-@software{afrifayamoah2026code,
-  author    = {Afrifa-Yamoah, Eben and Awuah-Mensah, Yaw Kwaafo},
-  title     = {Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort},
+@software{awuahmensah2026code,
+  author    = {Awuah-Mensah, Yaw Kwaafo and Afrifa-Yamoah, Eben},
+  title     = {Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marineheatwave impacts on fished populations from catch per unit effort},
   year      = {2026},
-  version   = {1.0.0},
+  version   = {v1.0.0},
   publisher = {Zenodo},
   doi       = {10.5281/zenodo.23293722},
   url       = {https://doi.org/10.5281/zenodo.23293722}
