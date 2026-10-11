@@ -4,8 +4,8 @@ A simulation framework for attributing marine heatwave impacts on fished populat
 
 ## Authors
 
-- Eben Afrifa-Yamoah, ORCID [0000-0003-1741-9249](https://orcid.org/0000-0003-1741-9249)
 - Yaw Kwaafo Awuah-Mensah, ORCID [0009-0002-7893-0948](https://orcid.org/0009-0002-7893-0948)
+- Eben Afrifa-Yamoah, ORCID [0000-0003-1741-9249](https://orcid.org/0000-0003-1741-9249)
 
 ## Citation
 
