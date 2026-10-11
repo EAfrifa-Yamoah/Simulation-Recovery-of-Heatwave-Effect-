@@ -7,6 +7,24 @@ A simulation framework for attributing marine heatwave impacts on fished populat
 - Eben Afrifa-Yamoah, ORCID [0000-0003-1741-9249](https://orcid.org/0000-0003-1741-9249)
 - Yaw Kwaafo Awuah-Mensah, ORCID [0009-0002-7893-0948](https://orcid.org/0009-0002-7893-0948)
 
+## Citation
+
+If you use this code, please cite it as:
+
+Afrifa-Yamoah, E. and Awuah-Mensah, Y. K. (2026). Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort (Version 1.0.0). Zenodo. https://doi.org/10.5281/zenodo.23293722
+
+```bibtex
+@software{afrifayamoah2026code,
+  author    = {Afrifa-Yamoah, Eben and Awuah-Mensah, Yaw Kwaafo},
+  title     = {Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort},
+  year      = {2026},
+  version   = {1.0.0},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.23293722},
+  url       = {https://doi.org/10.5281/zenodo.23293722}
+}
+```
+
 ## What is here
 
 ```
