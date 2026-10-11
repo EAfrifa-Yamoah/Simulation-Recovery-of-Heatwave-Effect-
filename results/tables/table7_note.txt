@@ -1,0 +1,1 @@
+fit to survey index, correlation of fitted series with the TRUE effect: acute 0.093, distributed lag 0.295

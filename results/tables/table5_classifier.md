@@ -1,0 +1,8 @@
+| Truth | none | abundance | redistribution | uniform catchability | warm edge catchability | mixed | indeterminate |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| none | 171 | 1 | 0 | 6 | 2 | 0 | 23 |
+| abundance | 90 | 25 | 2 | 22 | 4 | 0 | 51 |
+| redistribution | 25 | 2 | 225 | 29 | 54 | 27 | 42 |
+| uniform catchability | 74 | 0 | 0 | 108 | 7 | 0 | 9 |
+| warm edge catchability | 0 | 1 | 3 | 28 | 166 | 0 | 3 |
+| mixed | 4 | 7 | 82 | 31 | 16 | 34 | 26 |
