@@ -1,6 +1,6 @@
 # Declined, displaced, or just harder to catch?
 
-A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort (CPUE). This repository reproduces every number, table and figure in the manuscript from R. The manuscript itself is not distributed here.
+A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort (CPUE). This repository reproduces every number, table and figure in the manuscript from R. The manuscript is available from the corresponding author on request (e.afrifayamoah@ecu.edu.au).
 
 ## Authors
 
