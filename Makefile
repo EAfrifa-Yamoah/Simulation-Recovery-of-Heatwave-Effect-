@@ -1,5 +1,5 @@
 # Everything runs in R. See README.
-.PHONY: all run tables figures doc test quick clean
+.PHONY: all run tables figures test quick clean
 
 all: run tables figures
 
@@ -14,9 +14,6 @@ tables:
 
 figures:
 	Rscript scripts/make_figures.R
-
-doc:
-	Rscript scripts/build_manuscript.R
 
 test:
 	NOT_CRAN=true Rscript -e 'testthat::test_dir("tests/testthat", reporter = "summary")'

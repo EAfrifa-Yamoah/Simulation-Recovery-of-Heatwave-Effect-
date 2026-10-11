@@ -1,6 +1,6 @@
 # =============================================================================
 # scripts/make_tables.R
-# Build every manuscript table from results/ as markdown (for pandoc) and CSV.
+# Build every manuscript table from results/ as markdown and CSV.
 #   Rscript scripts/make_tables.R
 # =============================================================================
 for (f in list.files("R", full.names = TRUE)) source(f)

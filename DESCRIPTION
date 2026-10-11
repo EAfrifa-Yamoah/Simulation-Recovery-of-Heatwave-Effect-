@@ -5,9 +5,9 @@ Version: 2.0.0
 Authors@R: c(
     person("Eben", "Afrifa-Yamoah", email = "e.afrifayamoah@ecu.edu.au", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1741-9249")),
     person("Yaw Kwaafo", "Awuah-Mensah", email = "y.awuahmensah@ecu.edu.au", role = "aut", comment = c(ORCID = "0009-0002-7893-0948")))
-Description: Operating model, estimator suite, experiments, figures, tables and manuscript build for the marine heatwave CPUE attribution study. Everything runs in R; the document is produced by pandoc.
+Description: Operating model, estimator suite, experiments, figures and tables for the marine heatwave CPUE attribution study. Everything runs in R.
 Depends: R (>= 4.3)
 Imports: stats, utils, parallel, mgcv
 Suggests: testthat
-SystemRequirements: pandoc, poppler-utils (pdftoppm)
+SystemRequirements: poppler-utils (pdftoppm)
 License: MIT
