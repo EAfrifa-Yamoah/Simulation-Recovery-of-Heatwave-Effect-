@@ -1,7 +1,7 @@
 # Everything runs in R. See README.
 .PHONY: all run tables figures doc test quick clean
 
-all: run tables figures doc
+all: run tables figures
 
 run:
 	Rscript scripts/run_all.R

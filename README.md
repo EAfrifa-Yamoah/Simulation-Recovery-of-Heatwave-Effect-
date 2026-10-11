@@ -1,6 +1,6 @@
 # Declined, displaced, or just harder to catch?
 
-A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort (CPUE). This repository reproduces every number, table and figure in the manuscript, and builds the manuscript itself, from R.
+A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort (CPUE). This repository reproduces every number, table and figure in the manuscript from R. The manuscript itself is not distributed here.
 
 ## Authors
 
@@ -35,10 +35,9 @@ scripts/
   make_figures.R         all figures -> figures/*.pdf and 300 dpi *.png (base graphics)
   build_manuscript.R     manuscript.md -> manuscript_sim-rec_revised.docx via pandoc,
                          with every quoted number evaluated from results/
+                         (manuscript.md is kept outside this repository)
 tests/testthat/          40 checks, including the ones that would have caught the
                          bugs removed in version 2 (see Version 2 changes below)
-manuscript.md            the single manuscript source (LaTeX math, {{TABLE:..}} and
-                         {{r ..}} tokens resolved at build time)
 ```
 
 ## Reproduce
@@ -51,7 +50,7 @@ make quick       # the whole pipeline at small sizes (about 2 minutes)
 make run         # full run: ~12,000 replicates, ~1 hour on two cores
 make tables      # results/tables/
 make figures     # figures/
-make doc         # manuscript_sim-rec_revised.docx
+make doc         # manuscript_sim-rec_revised.docx (needs manuscript.md in the working directory)
 ```
 
 `make run` caches each stage in `results/parts/`; delete a stage's RDS to rerun it. `MHW_CORES=n` sets the number of forked workers (default: all but one). Seeds are a deterministic function of the replicate index, so scenarios share random numbers and the results are bit reproducible for a given R version.

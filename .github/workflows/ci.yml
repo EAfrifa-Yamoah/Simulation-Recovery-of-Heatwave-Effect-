@@ -12,9 +12,9 @@ jobs:
         run: Rscript -e 'install.packages(c("testthat", "mgcv"))'
       - name: tests
         run: make test
-      - name: quick pipeline, tables, figures, document
+      - name: quick pipeline, tables, figures
         run: |
           sudo apt-get install -y poppler-utils
-          make quick tables figures doc
+          make quick tables figures
       - uses: actions/upload-artifact@v4
         with: { name: quick-outputs, path: "figures/*.png" }
