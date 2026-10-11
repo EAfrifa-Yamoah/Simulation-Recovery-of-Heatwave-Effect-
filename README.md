@@ -35,7 +35,7 @@ scripts/
   build_manuscript.R     manuscript.md -> manuscript_sim-rec_revised.docx via pandoc,
                          with every quoted number evaluated from results/
 tests/testthat/          40 checks, including the ones that would have caught the
-                         bugs removed in version 2 (see RESPONSE_TO_REVIEW.md)
+                         bugs removed in version 2 (see Version 2 changes below)
 manuscript.md            the single manuscript source (LaTeX math, {{TABLE:..}} and
                          {{r ..}} tokens resolved at build time)
 ```
