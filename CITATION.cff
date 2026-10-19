@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this code, please cite it using the metadata from this file."
 type: software
-title: "Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marineheatwave impacts on fished populations from catch per unit effort"
+title: "Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort"
 authors:
   - family-names: Awuah-Mensah
     given-names: Yaw Kwaafo
@@ -18,8 +18,8 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.23293721
     description: "Zenodo concept DOI, resolves to the latest version"
-version: 1.0.1
-date-released: 2026-10-11
+version: 1.1.0
+date-released: 2026-10-19
 repository-code: https://github.com/EAfrifa-Yamoah/Simulation-Recovery-of-Heatwave-Effect-
 license: MIT
 keywords:

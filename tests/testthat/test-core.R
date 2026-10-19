@@ -128,3 +128,13 @@ test_that("slope_se returns a finite HAC standard error and handles rank deficie
   f6 <- slope_se(y6, x)
   expect_true(is.finite(f6$beta)); expect_lt(f6$rank, 5)
 })
+
+test_that("sensitivity ranges contain the defaults and keep contraction non-negative", {
+  cfg <- default_config()
+  for (nm in names(SENS_RANGES)) {
+    r <- SENS_RANGES[[nm]]
+    expect_true(r[1] <= cfg[[nm]] && cfg[[nm]] <= r[2], info = nm)
+  }
+  # beta_J multiplies targeting strength; a negative value would reverse targeting
+  expect_gte(SENS_RANGES$beta_J[1], 0)
+})

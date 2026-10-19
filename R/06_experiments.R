@@ -276,11 +276,10 @@ exp_temporal <- function(cfg, R = 150, seed0 = 909, L = 24, coverage = 0.20) {
 }
 
 # ---- Experiment E: global sensitivity -----------------------------------------
-exp_sensitivity <- function(cfg, n_design = 180, R = 12, seed0 = 606,
-                            scenario = "S1111") {
-  set.seed(seed0)
-  rng <- list(
-    beta_mu    = c(0.5, 3.5),  beta_J    = c(-1.6, 0.0),
+#' Ranges sampled by the global sensitivity design. Each must contain the
+#' default value in default_config() (checked in tests/testthat/test-core.R).
+SENS_RANGES <- list(
+    beta_mu    = c(0.5, 3.5),  beta_J    = c(0.0, 1.6),   # contraction strength, centred on the default 0.8
     a0         = c(0.4, 1.8),  sigma_log = c(0.35, 1.0),
     cv_surv    = c(0.2, 0.9),  surv_cover = c(0.05, 0.35),
     a_surv     = c(1.0, 5.0),  belief_lr = c(0.1, 0.9),
@@ -288,6 +287,11 @@ exp_sensitivity <- function(cfg, n_design = 180, R = 12, seed0 = 606,
     warm_trend = c(0.0, 0.20), kappa     = c(0.04, 0.24),
     delta_dep  = c(0.0, 0.16), sigma_th  = c(1.4, 3.0),
     F_scale    = c(0, 3e-4))
+
+exp_sensitivity <- function(cfg, n_design = 180, R = 12, seed0 = 606,
+                            scenario = "S1111") {
+  set.seed(seed0)
+  rng <- SENS_RANGES
   k <- length(rng)
   lhs <- sapply(seq_len(k), function(j) (sample(n_design) - runif(n_design)) / n_design)
   design <- as.data.frame(mapply(function(u, rg) rg[1] + u * diff(rg),
