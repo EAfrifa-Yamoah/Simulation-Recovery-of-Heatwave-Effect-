@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this code, please cite it using the metadata from this file."
 type: software
-title: "Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marineheatwave impacts on fished populations from catch per unit effort"
+title: "Code: Declined, displaced, or just harder to catch? A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort"
 authors:
   - family-names: Awuah-Mensah
     given-names: Yaw Kwaafo
