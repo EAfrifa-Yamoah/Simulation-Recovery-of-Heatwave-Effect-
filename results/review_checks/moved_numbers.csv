@@ -1,0 +1,39 @@
+"quantity","before","after","change"
+"True effect, decline (S1001)",-0.0231,-0.0236,-5e-04
+"Nominal, decline (S1001)",-0.0225,-0.0277,-0.0052
+"Delta, decline (S1001)",-0.0241,-0.0285,-0.0043
+"Survey, decline (S1001)",-0.0236,-0.0243,-7e-04
+"Nominal, catchability loss (S0011)",-0.0385,-0.0381,4e-04
+"Delta, catchability loss (S0011)",-0.0418,-0.0425,-7e-04
+"Survey, catchability loss (S0011)",-4e-04,-0.001,-6e-04
+"True effect, decline + catchability (S1011)",-0.0228,-0.0233,-5e-04
+"Nominal, decline + catchability (S1011)",-0.0637,-0.0692,-0.0055
+"Survey, decline + catchability (S1011)",-0.0256,-0.0262,-6e-04
+"In-frame effect, redistribution (S0101)",-0.0099,-0.0099,0
+"Survey, redistribution (S0101)",-0.0085,-0.0085,0
+"Spatial delta, redistribution (S0101)",-0.0037,-0.0037,0
+"Nominal, warm-edge loss (SPQ1)",-0.1016,-0.1071,-0.0055
+"Matched grid: nominal, loss only",-0.039,-0.0386,4e-04
+"Matched grid: nominal, mixture",-0.0357,-0.038,-0.0022
+"Matched grid: nominal, decline only",-0.0296,-0.0322,-0.0025
+"Matched grid: true effect, decline only",-0.0231,-0.0237,-6e-04
+"Fishery CoG shift, redistribution (km)",45.0984,45.0984,0
+"Survey CoG shift, redistribution (km)",48.9295,48.9295,0
+"Fishery CoG shift, warm-edge loss (km)",35.1684,34.425,-0.7434
+"Survey RMSE, 7 stations monthly",0.0416,0.0429,0.0013
+"Survey RMSE, 14 stations monthly",0.0276,0.0311,0.0036
+"Survey coverage, 14 stations monthly",0.8867,0.8667,-0.02
+"Survey power, 14 stations monthly",0.2567,0.24,-0.0167
+"Nominal RMSE, design scenario",0.0541,0.0584,0.0043
+"Delta RMSE, design scenario",0.0605,0.0647,0.0042
+"Survey RMSE, 29 stations quarterly",0.0593,0.0912,0.0319
+"Distributed lag R2 (survey target)",0.1767,0.1871,0.0104
+"Distributed lag corr. with truth",0.2947,0.2406,-0.0541
+"Distributed lag OOS RMSE",0.4946,0.5453,0.0506
+"Same-month OOS RMSE",0.4054,0.4373,0.0319
+"Key accuracy",0.5207,0.5121,-0.0086
+"Key indeterminate",0.11,0.1143,0.0043
+"Frame: in-frame effect, warming refuge",-0.01,-0.01,0
+"Frame: survey, static refuge",0.0084,0.0084,0
+"SRC nominal bias on catchability loss",-0.5753,-0.5753,0
+"Max MCSE",0.0025,0.0025,0

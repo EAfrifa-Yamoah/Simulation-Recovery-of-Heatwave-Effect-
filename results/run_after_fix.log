@@ -1,0 +1,83 @@
+using 2 core(s)
+=== identifiability === 19:13:42
+    done at 0 min
+=== factorial === 19:13:45
+  factorial: S0000  19:13:45
+  factorial: S0001  19:14:36
+  factorial: S0010  19:15:31
+  factorial: S0011  19:16:30
+  factorial: S0100  19:17:23
+  factorial: S0101  19:18:21
+  factorial: S0110  19:19:22
+  factorial: S0111  19:20:22
+  factorial: S1000  19:21:20
+  factorial: S1001  19:22:11
+  factorial: S1010  19:23:01
+  factorial: S1011  19:23:53
+  factorial: S1100  19:24:43
+  factorial: S1101  19:25:38
+  factorial: S1110  19:26:34
+  factorial: S1111  19:27:31
+  factorial: SPQ0  19:28:27
+  factorial: SPQ1  19:29:18
+  factorial: SPQT0  19:30:13
+  factorial: SPQT1  19:31:13
+    done at 18.5 min
+=== frame === 19:32:10
+  frame closed S0100  19:32:10
+  frame closed S0101  19:32:31
+  frame closed S1100  19:32:52
+  frame closed S1101  19:33:12
+  frame open_static S0100  19:33:32
+  frame open_static S0101  19:33:53
+  frame open_static S1100  19:34:14
+  frame open_static S1101  19:34:33
+  frame open_dynamic S0100  19:34:54
+  frame open_dynamic S0101  19:35:17
+  frame open_dynamic S1100  19:35:39
+  frame open_dynamic S1101  19:36:00
+    done at 22.7 min
+=== coverage === 19:36:23
+  coverage 0.02 every 1 srs cv 0.45  19:36:23
+  coverage 0.05 every 1 srs cv 0.45  19:36:50
+  coverage 0.1 every 1 srs cv 0.45  19:37:16
+  coverage 0.2 every 1 srs cv 0.45  19:37:43
+  coverage 0.4 every 1 srs cv 0.45  19:37:59
+  coverage 0.02 every 1 strat cv 0.45  19:38:10
+  coverage 0.05 every 1 strat cv 0.45  19:38:46
+  coverage 0.1 every 1 strat cv 0.45  19:39:34
+  coverage 0.2 every 1 strat cv 0.45  19:40:53
+  coverage 0.4 every 1 strat cv 0.45  19:41:23
+  coverage 0.02 every 3 srs cv 0.45  19:41:44
+  coverage 0.05 every 3 srs cv 0.45  19:41:57
+  coverage 0.1 every 3 srs cv 0.45  19:42:42
+  coverage 0.2 every 3 srs cv 0.45  19:43:17
+  coverage 0.4 every 3 srs cv 0.45  19:43:36
+  coverage 0.02 every 6 srs cv 0.45  19:43:51
+  coverage 0.05 every 6 srs cv 0.45  19:44:01
+  coverage 0.1 every 6 srs cv 0.45  19:44:21
+  coverage 0.2 every 6 srs cv 0.45  19:44:36
+  coverage 0.4 every 6 srs cv 0.45  19:44:44
+  coverage 0.02 every 1 srs cv 0.9  19:44:52
+  coverage 0.05 every 1 srs cv 0.9  19:45:15
+  coverage 0.1 every 1 srs cv 0.9  19:45:36
+  coverage 0.2 every 1 srs cv 0.9  19:45:59
+  coverage 0.4 every 1 srs cv 0.9  19:46:13
+    done at 32.7 min
+=== matched === 19:46:23
+    done at 35.8 min
+=== temporal === 19:49:33
+    done at 36.5 min
+=== sensitivity === 19:50:13
+  sensitivity design point 20/200  19:50:41
+  sensitivity design point 40/200  19:51:06
+  sensitivity design point 60/200  19:51:37
+  sensitivity design point 80/200  19:52:08
+  sensitivity design point 100/200  19:52:36
+  sensitivity design point 120/200  19:53:08
+  sensitivity design point 140/200  19:53:38
+  sensitivity design point 160/200  19:54:07
+  sensitivity design point 180/200  19:54:36
+  sensitivity design point 200/200  19:55:06
+    done at 41.4 min
+all stages complete in 41.5 min

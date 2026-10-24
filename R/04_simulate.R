@@ -21,12 +21,18 @@
 
 #' Run the state and observation processes for one world.
 #' If `E_fixed` is supplied the fleet allocation is taken as given (counterfactual).
+#' `Tmat_base` and `phi_out_base` are the temperature and refuge suitability of
+#' the series WITHOUT heatwaves; with redistribution off, the fixed shares are
+#' computed from them in both runs (they default to the run's own series).
 run_world <- function(cfg, grid, sw, Tmat, phi_out_t, J, eta, fleet,
-                      E_fixed = NULL, observe = TRUE) {
+                      E_fixed = NULL, observe = TRUE,
+                      Tmat_base = Tmat, phi_out_base = phi_out_t) {
   S <- nrow(grid); Tn <- ncol(Tmat)
   Js  <- scale_severity(J)
   phi <- suitability(Tmat, cfg)
-  ds  <- distribution_shares(phi, cfg, sw$tracking, phi_out_t)
+  ds  <- distribution_shares(phi, cfg, sw$tracking, phi_out_t,
+                             phi_base = suitability(Tmat_base, cfg),
+                             phi_out_base = phi_out_base)
   q   <- catchability_field(cfg, grid, J, sw)
   dose <- thermal_dose(Tmat, ds$pi, cfg)
 
@@ -36,6 +42,8 @@ run_world <- function(cfg, grid, sw, Tmat, phi_out_t, J, eta, fleet,
   logN[1] <- log(cfg$N0)
 
   belief <- rep(0, S)
+  # Month 1 is the initial state (log N0); eq. (9) generates months 2..Tn.
+  # Effort is allocated and catch observed in every month including month 1.
   for (t in seq_len(Tn)) {
     if (is.null(E_fixed)) {
       if (t == 1) {                              # prior belief: climatological density
@@ -43,8 +51,8 @@ run_world <- function(cfg, grid, sw, Tmat, phi_out_t, J, eta, fleet,
       }
       E[, t] <- allocate_effort_month(belief, grid, fleet, cfg, Js[t], sw$sampling)
     }
-    Fv[t] <- fishing_mortality(q[, t], ds$pi[, t], E[, t], cfg, S)
     if (t > 1) {
+      Fv[t] <- fishing_mortality(q[, t], ds$pi[, t], E[, t], cfg, S)
       lagd <- if (t - cfg$dose_lag >= 1) dose[t - cfg$dose_lag] else 0
       logN[t] <- abundance_step(logN[t - 1], Fv[t], lagd, eta[t], cfg, sw$decline)
     }
@@ -82,13 +90,15 @@ simulate_replicate <- function(cfg, scenario = "S1111", seed = NULL,
   Ivec  <- if (sd(J) > 0) (J - mean(J)) / sd(J) else rep(0, Tn)
 
   ## ---- factual world (sequential) ---------------------------------------
+  rf_c <- refuge_suitability(cfg, parts, FALSE)
   wf <- run_world(cfg, grid, sw, parts$base + parts$event,
-                  refuge_suitability(cfg, parts, TRUE), J, eta, fleet)
+                  refuge_suitability(cfg, parts, TRUE), J, eta, fleet,
+                  Tmat_base = parts$base, phi_out_base = rf_c)
 
   ## ---- counterfactual: no event, same effort, same noise ----------------
-  wc <- run_world(cfg, grid, sw, parts$base,
-                  refuge_suitability(cfg, parts, FALSE), rep(0, Tn), eta, fleet,
-                  E_fixed = wf$E, observe = FALSE)
+  wc <- run_world(cfg, grid, sw, parts$base, rf_c, rep(0, Tn), eta, fleet,
+                  E_fixed = wf$E, observe = FALSE,
+                  Tmat_base = parts$base, phi_out_base = rf_c)
 
   dlogN    <- wf$logN - wc$logN            # total abundance effect
   dlogN_in <- wf$logN_in - wc$logN_in      # in frame abundance effect

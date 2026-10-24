@@ -1,0 +1,16 @@
+[1] "C.UTF-8"
+Check 1: max |paired contrast| before the first anomaly, 40 replicates of S1001: 0 
+Check 2 (mean, max over 40 replicates):
+     frac_months_refuge_stressed omitted_share max_p_out cumulative_effect_logN
+mean                    0.000781      0.000234     0.133               0.000625
+max                     0.020833      0.007229     0.249               0.019670
+      scenario     truth    delta delta_se delta_effort delta_effort_se
+S1011    S1011 -0.022060 -0.06883  0.00650     -0.07150         0.00635
+S1001    S1001 -0.022285 -0.03100  0.00557     -0.03169         0.00545
+S0011    S0011  0.000297 -0.04219  0.00288     -0.04238         0.00286
+S0001    S0001  0.000000 -0.00111  0.00276     -0.00107         0.00279
+      difference d_effort_per_cell
+S1011  -2.67e-03             0.120
+S1001  -6.92e-04             0.128
+S0011  -1.90e-04             0.107
+S0001   4.19e-05             0.100

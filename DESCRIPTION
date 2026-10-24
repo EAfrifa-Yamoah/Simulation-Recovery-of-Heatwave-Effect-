@@ -1,13 +1,13 @@
 Package: mhwcpue
 Type: Project
 Title: Declined, displaced, or just harder to catch? A simulation framework for attributing marine heatwave impacts on fished populations from CPUE
-Version: 1.1.0
+Version: 2.0.0
 Authors@R: c(
     person("Yaw Kwaafo", "Awuah-Mensah", email = "y.awuahmensah@ecu.edu.au", role = "aut", comment = c(ORCID = "0009-0002-7893-0948", affiliation = "Edith Cowan University")),
     person("Eben", "Afrifa-Yamoah", email = "e.afrifayamoah@ecu.edu.au", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1741-9249", affiliation = "Edith Cowan University")))
-Description: Operating model, estimator suite, experiments, figures and tables for the marine heatwave CPUE attribution study. Everything runs in R.
+Description: Operating model, estimator suite, experiments, figures, tables and manuscript build for the marine heatwave CPUE attribution study. Everything runs in R; the document is produced by pandoc.
 Depends: R (>= 4.3)
 Imports: stats, utils, parallel, mgcv
 Suggests: testthat
-SystemRequirements: poppler-utils (pdftoppm)
+SystemRequirements: pandoc, poppler-utils (pdftoppm)
 License: MIT

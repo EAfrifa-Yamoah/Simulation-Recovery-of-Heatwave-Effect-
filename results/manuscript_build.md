@@ -1,0 +1,535 @@
+# Declined, displaced, or just harder to catch? A simulation framework for attributing marine heatwave impacts on fished populations from catch per unit effort
+
+## Abstract
+
+Marine heatwaves are increasingly associated with declines in fished populations, and catch per unit effort (CPUE) is the signal most often used to detect them. CPUE is, however, the product of three processes: abundance, availability (the spatial overlap of the stock with the fishery) and catchability (the efficiency with which available fish are caught). A marine heatwave can perturb each of these, so a CPUE based model that carries a single heatwave term estimates their sum rather than a population response. Whether that term can be attributed to abundance is usually assumed rather than tested, and it cannot be tested empirically because the true decomposition of a real catch rate is never observed. We address the question by simulation, where the truth is known by construction. We first show that total abundance and spatially uniform catchability are structurally non identifiable from fishery data alone, that spatially structured catchability is identified, and that a survey with protocol fixed catchability breaks the degeneracy. We then build a mechanistic operating model in which abundance, availability and catchability all respond to one driver, the species' thermal niche, with an open poleward boundary beyond which a refuge warms with the frame, removal based fishing mortality, tow level observation of catch under preferential effort, and an optional fishery independent survey. Two estimands are defined by paired counterfactuals: the event effect on total abundance and on in frame abundance. Over a 2⁴ factorial of decline, redistribution, uniform catchability loss and fleet contraction, with 400 replicates per cell, no fishery index was robust to uniform catchability change, and nothing in the fishery data can make one so; a spatially explicit delta model did recover in frame abundance under redistribution, so availability has a fishery only remedy that catchability lacks. The survey index was unbiased for in frame abundance in every cell and biased for total abundance by exactly the share of the stock that an event moves across the frame boundary, which no observation confined to the frame can see. A spatial centre of gravity diagnostic recovered redistribution where the scalar coefficient was blind, although a warm edge catchability change imitated that shift in the fishery data and was separated from genuine movement only by the centre of gravity of an independent survey. Survey frequency mattered more than station count: a monthly survey of 7 to 14 stations outperformed every fishery estimator, a quarterly survey needed several times the stations, and a semiannual survey could not separate the event from the seasonal cycle. The framework specifies which spatial structure, auxiliary data and temporal structure resolve each component of a heatwave signal, and how much of each is needed, converting an inferential impossibility into a monitoring design problem with quantitative answers.
+
+**Keywords:** marine heatwave; catch per unit effort; catchability; availability; hyperstability; identifiability; operating model; species distribution; simulation; survey design
+
+## 1. Introduction
+
+Marine heatwaves, prolonged and discrete periods of anomalously warm water, have become a defining feature of contemporary ocean change (Hobday et al., 2016). They have lengthened and intensified over the past century (Oliver et al., 2018), are projected to become more frequent and severe under continued warming (Frölicher et al., 2018; Afrifa-Yamoah et al., 2026) and now rank among the most acute threats to marine biodiversity and the ecosystem services it underpins (Smale et al., 2019). Their biological consequences are large and varied, ranging from mass mortality and habitat loss to wholesale community reorganisation and shifts in species distributions (Wernberg et al., 2013, 2016; Babcock et al., 2019; Cheung and Frölicher, 2020). For fished populations in particular, the pressing management question is quantitative: by how much did a given heatwave change the resource, and how confident can we be in that number?
+
+The datum most often brought to bear on that question is catch per unit effort. It is collected continuously by the fishery itself, extends back decades and covers the fished range at fine spatial and temporal resolution, so a fall in CPUE that coincides with a heatwave is a natural candidate for a population signal. The difficulty is that CPUE is not a measurement of abundance. It is the joint outcome of three distinct processes. Abundance is the size of the population. Availability is the fraction of that population that overlaps the fishery in space and time, and therefore could in principle be caught. Catchability is the efficiency with which available fish are actually taken, given the gear, the behaviour of the fish and the way effort is deployed. Writing catch rate schematically as the product of catchability, availability and abundance makes the identification problem plain: a heatwave can move all three at once, and a model that summarises the event with a single coefficient recovers a combination of the three responses, not the abundance response alone.
+
+This is not a subtle bias to be bounded and set aside. The three responses need not even share a sign. A heatwave can reduce abundance through mortality or recruitment failure; it can raise or lower availability by redistributing the stock into or out of the fished area; and it can raise or lower catchability by concentrating fish into catchable aggregations or dispersing them out of them. Hyperstability, in which CPUE remains high while abundance falls because the fishery tracks a contracting distribution, is the best known manifestation and has been documented across many fisheries (Harley et al., 2001; Erisman et al., 2011), and the more general difficulty of reading stock status from catch rates is long recognised (Maunder et al., 2006). The tendency of many stocks to contract their occupied area as they decline, which drives this behaviour, is itself well documented (Thorson et al., 2016b). Each of these pathways has ample precedent in the heatwave and climate literature, but the field lacks a framework that treats them jointly and asks what, if anything, a CPUE based attribution can recover when all three operate together.
+
+Standardisation is the usual response to the fact that nominal CPUE is confounded. Statistical standardisation, which conditions catch rate on measurable covariates of the fishing operation, is now routine and is supported by a mature set of good practices for stock assessment inputs (Maunder and Punt, 2004; Hoyle et al., 2024). Spatiotemporal and geostatistical index standardisation has advanced the state of the art considerably by modelling the spatial field explicitly (Thorson et al., 2015; Thorson and Barnett, 2017; Thorson, 2019), is increasingly recommended for deriving abundance indices from catch rates (Maunder et al., 2020; Thorson et al., 2020), and can additionally yield model based estimates of distribution shift such as the centre of gravity (Thorson et al., 2016a). Simulation work has clarified how sampling design and spatial dependence propagate into survey and CPUE based indices (Fuster-Alonso et al., 2024). Even so, it has long been argued that a standardised index in isolation gives limited information about the status of an individual stock (Maunder et al., 2006). These methods condition out the part of the variation that is explained by observed covariates and by spatial position. What they cannot do is separate abundance from availability and catchability when the three move together in response to an unobserved common driver, because no covariate of the fishing operation measures the latent thermal response of the stock. That separation is a question of identifiability, not of estimator refinement, and it is the question we take up here.
+
+We make the argument by simulation because the object of interest, the decomposition of a realised catch rate into its three multiplicative parts, is never observed in a real fishery. Simulation makes it observable by construction. We build an operating model in which one environmental driver, the species' thermal niche, generates all three responses simultaneously, observe catch through a realistic sampling process that is itself perturbed by the heatwave, apply the same standardisation tools that would be used on real data and compare each recovered signal against the mechanism that produced it. The contribution is threefold. First, we establish that the central obstacle is structural: total abundance and uniform catchability are non identifiable from fishery data alone, as a matter of the likelihood rather than of finite sample noise, while spatially structured catchability is identified. Second, we show that the survey which breaks that degeneracy is unbiased for the abundance inside its frame and not for the abundance of the stock, and that the distinction is set by whether the event moves biomass across the frame boundary, which makes the choice of estimand part of the design. Third, we turn the negative result into a constructive one by identifying, for each confounding pathway, the spatial structure, auxiliary data or temporal structure that resolves it, and by quantifying how much of each is needed, including how often a survey must sample. The result reframes heatwave attribution from CPUE as a monitoring design problem with quantitative answers rather than an inferential dead end.
+
+## 2. A structural view of the problem
+
+### 2.1 The observation model and its invariance
+
+Let the fished domain be a lattice of $S$ cells indexed by $s$ and months indexed by $t$. Write $N_t$ for total abundance, $\pi_{st}$ for the share of the population in cell $s$, $q_{st}$ for catchability and $E_{st}$ for fishing effort. The population shares satisfy the frame constraint $\sum_s \pi_{st} + \pi^{\text{out}}_t = 1$, where $\pi^{\text{out}}_t$ is the fraction outside the sampling frame. The expected catch rate in a fished cell is
+
+$$\mu_{st} = q_{st}\,E_{st}\,N_t\,\pi_{st}.$$
+
+Every fishery observation, whether an encounter, a positive catch or a standardised index, is a function of the state only through $\mu_{st}$. This is the crux of the identification problem. For any strictly positive monthly sequence $a_t$, the reparameterisation
+
+$$N_t^{\star} = a_t\,N_t, \qquad q_{st}^{\star} = q_{st} / a_t$$
+
+leaves $\mu_{st}$ unchanged in every cell and every month, so that the encounter probability, the positive catch distribution, the effort allocation and hence the entire fishery likelihood satisfy $\mathcal{L}_{\text{fish}}(N_{1:T}, q) = \mathcal{L}_{\text{fish}}(N_{1:T}^{\star}, q^{\star})$. Total abundance and any spatially uniform component of catchability are therefore not separately identified from fishery data alone: they are confounded exactly, not approximately. No amount of data and no refinement of the standardisation model can break an invariance of the likelihood itself. A fishery independent survey observes $q^{\text{surv}}_{st} N_t \pi_{st}$ with a catchability that does not carry the factor $a_t$, so it is not invariant under the same reparameterisation and breaks the degeneracy. We verify this claim numerically in Section 4.1, where the fishery only information matrix $\mathcal{I}_{\text{fish}}(\beta_N, \beta_q)$ for the abundance and catchability slopes is singular to machine precision and the combined information matrix $\mathcal{I}_{\text{fish}} + \mathcal{I}_{\text{surv}}$ is well conditioned.
+
+Two clarifications matter for what follows. The invariance is a statement about the uniform (domain wide) part of catchability. Spatially structured catchability, for instance a change confined to the warm edge of the range, is not annihilated by a scalar *a*ₜ and interacts with the spatial machinery of the estimators in more subtle ways, which is why we treat it as a separate mechanism. And structural non identifiability, a flat direction in the likelihood, is distinct from practical non identifiability, a likelihood that is curved but nearly flat at realistic sample sizes. We keep the two separate throughout: Section 4.1 establishes the structural result, and the finite sample experiments that follow quantify how the practical problem behaves once the structural one is granted.
+
+### 2.2 The mechanisms as an experimental design
+
+The operating model lets each response be switched on or off independently. Three are biological or operational channels through which a heatwave can change a catch rate: abundance decline, redistribution or availability change, and uniform catchability loss. A fourth is a fleet response: an event driven contraction of the fished footprint, in which the fleet concentrates on the cells it knows best. Together they give a full 2⁴ factorial of sixteen cells. We treat these as the factors of a designed experiment rather than as a handful of illustrative scenarios, which lets us estimate not only the main effect of each mechanism on each estimator but also the interactions among them, including the interaction between the fleet's contraction and the biological channels, which is where a sampling artefact can appear. We do not assume the mechanisms combine additively on the coefficient scale; we estimate the interaction terms and report them (Section 4.2). To this core design we add four spatially structured catchability cells, in which catchability declines only at the warm edge of the range, with and without redistribution and with and without the fleet contraction, to test whether such a change can imitate genuine redistribution.
+
+### 2.3 Two estimands
+
+Throughout, the targets of estimation are event attributable effects defined by a paired counterfactual. Every replicate is generated twice under common random numbers: once with the heatwave series as drawn, giving the factual log abundance $\log N_t$ and the share of the stock inside the sampling frame, and once with the event anomaly removed while climatology, the chronic warming trend, the noise field, the process noise, the fleet and the realised effort allocation are all held fixed, giving the counterfactual $\log N^{0}_t$ and its frame share. The effect on total abundance is $\Delta_t = \log N_t - \log N^{0}_t$; the effect on in frame abundance, $\Delta^{\text{in}}_t$, adds the change in the log frame share. The scalar estimands $\beta$ and $\beta^{\text{in}}$ are the partial slopes of these series on centred severity $I_t$, controlling for a linear trend and a first order seasonal harmonic,
+
+$$\Delta_t = \alpha + \beta\,I_t + \zeta_1\,\tfrac{t}{T} + \zeta_2 \sin\!\tfrac{2\pi t}{12} + \zeta_3 \cos\!\tfrac{2\pi t}{12} + u_t.$$
+
+We carry both because a fishery independent survey of the frame can be unbiased only for the second: when an event moves biomass across the frame boundary, in frame abundance and total abundance diverge, and no observation confined to the frame can tell them apart. Which of the two a manager needs depends on whether the stock beyond the boundary is still the stock being managed. Defining the estimands as within replicate contrasts, rather than as marginal associations, is what separates the event effect from background warming and seasonality, and the identical specification is applied to every estimator so that all of them target the same quantities. In the parameterisation used here the marginal association of factual log abundance with severity agrees with $\beta$ to within 0.002, which we report so that the reader can see that the distinction, although real, is not what drives the results below.
+
+## 3. Methods
+
+### 3.1 Model equations
+
+This section states the operating model and estimators formally; the subsections that follow describe the same components in prose and give the parameter values used. The state variables are total abundance $N_t$, the distribution shares $\pi_{st}$, catchability $q_{st}$ and the temperature field $T_{st}$; the observed quantities are the catch rate $Y_{st}$ and the survey catch $V_{st}$.
+
+#### Domain and notation
+
+The fished domain is a regular lattice of $S = n_{\text{lat}} \times n_{\text{shelf}}$ cells indexed by $s = 1, \dots, S$, observed over $t = 1, \dots, T$ monthly time steps. Each cell has a latitude band $\ell(s)$, a cross shelf band $c(s)$, and standardised spatial coordinates $y_s$ (northing) and $x_s$ (offshore position). Total abundance in month $t$ is $N_t$, and the population is distributed across cells by the shares $\pi_{st} \ge 0$, which satisfy the frame constraint
+
+$$\sum_{s=1}^{S} \pi_{st} + \pi^{\text{out}}_t = 1,$$
+
+where $\pi^{\text{out}}_t$ is the fraction of the population outside the sampling frame. Catchability is $q_{st}$, effort is $E_{st}$, and the event severity in month $t$ is $J_t \ge 0$.
+
+#### Temperature field
+
+Temperature is the sum of a deterministic baseline and the heatwave anomaly, with the baseline itself decomposed so that the counterfactual is well defined:
+
+$$T_{st} = \underbrace{\bar{T} - g_{\text{lat}}\,\ell(s) - g_{\text{dep}}\,c(s)}_{\text{climatology}} + \underbrace{A\sin\!\left(\tfrac{2\pi t}{12} - \phi\right)}_{\text{season}} + \underbrace{\gamma\,\tfrac{t}{12}}_{\text{trend}} + \underbrace{\varepsilon_{st}}_{\text{noise}} + \underbrace{H_{st}}_{\text{event}} .$$
+
+The noise field $\varepsilon_{st}$ is separable, first order autoregressive in both space and time, with marginal standard deviation $\sigma_{\varepsilon}$, nearest neighbour spatial correlation $\rho_s$, and temporal correlation $\rho_t$. The event anomaly $H_{st}$ is non negative and is set to zero in the counterfactual world. The baseline temperature, obtained by deleting $H_{st}$, is written $T^{0}_{st}$.
+
+#### Heatwave severity
+
+Events are placed on a schedule of $K$ episodes with random start months, durations, and peak anomalies. Within an event the anomaly follows a smooth rise and decay. The monthly severity is the category weighted intensity above the category one threshold $\tau$,
+
+$$J_t = \frac{\max\!\left(H_t - \tau,\ 0\right)}{\tau}, \qquad H_t = \frac{1}{S}\sum_{s} H_{st},$$
+
+so $J_t \ge 0$ by construction. Every biological and fleet response is driven by $J_t$. For estimation, and only for estimation, the centred and scaled covariate
+
+$$I_t = \frac{J_t - \bar{J}}{\operatorname{sd}(J)}$$
+
+is used, so that no estimator receives the sign of the true response through its covariate.
+
+#### Thermal niche, movement, and the refuge beyond the frame
+
+Thermal suitability is Gaussian in the distance between local temperature and the optimum $T_{\text{opt}}$,
+
+$$\phi_{st} = \exp\!\left(-\frac{(T_{st} - T_{\text{opt}})^2}{2\,\sigma_{\text{th}}^2}\right).$$
+
+The sampling frame is open at its poleward edge. A refuge state one latitude band beyond the edge has temperature $T^{\text{ref}}_t = \bar{T} - g_{\text{lat}}\,(n_{\text{lat}} + 1 - \bar{\ell}) + A\sin(2\pi t/12 - \phi) + \gamma\,t/12 + H_t$, the same climatological gradient, season, trend and event anomaly that the frame experiences, and suitability $\phi^{\text{ref}}_t$ given by the same niche function. It carries the area weight of one band, $w^{\text{ref}} = n_{\text{shelf}}$. When the redistribution mechanism is active the population tracks an ideal free target, subject to partial adjustment: with $\tilde{\phi}_{st} = \phi_{st} / \big(\sum_{s'} \phi_{s't} + w^{\text{ref}}\phi^{\text{ref}}_t\big)$ and $\tilde{\phi}^{\text{ref}}_t$ defined likewise,
+
+$$\pi_{st} = (1 - \rho_m)\,\pi_{s,t-1} + \rho_m\,\tilde{\phi}_{st}, \qquad \pi^{\text{out}}_t = (1 - \rho_m)\,\pi^{\text{out}}_{t-1} + \rho_m\,\tilde{\phi}^{\text{ref}}_t,$$
+
+renormalised each month, with adjustment rate $\rho_m \in (0,1)$. Because the refuge warms with the frame, biomass leaves the frame only when conditions beyond the edge are better than within it, which in this parameterisation occurs in warm seasons and during events. A refuge with time invariant suitability, the specification used in an earlier version of this work, is retained as a sensitivity comparison (Section 4.5): it behaves as a thermostat that draws biomass out of the frame regardless of conditions. When redistribution is inactive the shares are held at their climatological values and $\pi^{\text{out}}_t$ is constant.
+
+#### Abundance state process
+
+Abundance follows a discrete transition on the log scale with density dependent recovery, removal based fishing mortality, and, when the decline mechanism is active, a response to a lagged thermal dose:
+
+$$\log N_t = \log N_{t-1} + r_0\!\left(1 - \frac{N_{t-1}}{K_{\text{cap}}}\right) - M - F_t - \kappa\,d_{t-L} + \eta_t,$$
+
+where $r_0$ is the intrinsic recovery rate, $K_{\text{cap}}$ the carrying capacity, $M$ natural mortality, $\kappa$ the abundance sensitivity, $L$ the response lag, and $\eta_t \sim \mathcal{N}(0, \sigma_{\text{proc}}^2)$ process noise. Fishing mortality is proportional to the expected catch per unit abundance implied by the month's effort allocation,
+
+$$F_t = f\,S\sum_{s=1}^{S} q_{st}\,\pi_{st}\,E_{st} \ \ge 0,$$
+
+so it rises with the overlap between fleet and stock and falls when catchability falls. The thermal dose is occupancy weighted, so that only the temperature the stock actually experiences drives the decline:
+
+$$d_t = \sum_{s=1}^{S} \pi_{st}\,\max\!\left(T_{st} - T_{\text{crit}},\ 0\right).$$
+
+#### Catchability
+
+Catchability combines a spatially uniform component, structurally confounded with abundance, and a spatially structured warm edge component:
+
+$$q_{st} = q_0 \cdot \underbrace{\exp\!\left(-\delta_{\text{dep}}\,\hat{J}_t\right)}_{\text{uniform}} \cdot \underbrace{\exp\!\left(-\delta_{\text{sp}}\,g_s\,\hat{J}_t\right)}_{\text{warm edge}},$$
+
+where $\hat{J}_t$ is the severity scaled to unit standard deviation over event months (and identically zero in a world without events) and $g_s = h_s / \bar{h}$, $h_s = \max(1 - \gamma_{\text{sp}}\,y_s,\ 0)$, is a latitudinal weight normalised to domain mean one, so the warm edge term redistributes catchability without changing its average level. Each component is switched on or off independently.
+
+#### Observation model
+
+The latent catch rate per unit effort in cell $s$ is
+
+$$\mu_{st} = S\,q_{st}\,N_t\,\pi_{st},$$
+
+where the factor $S$ expresses the share $\pi_{st}$ as a density relative to the domain mean. A cell receiving $E_{st}$ effort units is observed through $E_{st}$ tows. The cell encounters the stock if at least one tow does,
+
+$$p_{st} = 1 - \exp\!\left(-a_0\,\mu_{st}\,E_{st}\right),$$
+
+and the cell's catch rate, the mean over its tows, is lognormal given an encounter with variance that falls with effort, parameterised so that the two parts are mean coherent at any effort, $\mathbb{E}[Y_{st}] = \mu_{st}$:
+
+$$Y_{st} \mid (\text{encounter}) \sim \operatorname{Lognormal}\!\left(\log\frac{\mu_{st}}{p_{st}} - \tfrac{1}{2}\,\frac{\sigma_{\log}^2}{E_{st}},\ \frac{\sigma_{\log}^2}{E_{st}}\right), \qquad \Pr(Y_{st} = 0) = 1 - p_{st}.$$
+
+The coherence follows because $\mathbb{E}[Y_{st}] = p_{st}\cdot(\mu_{st}/p_{st}) = \mu_{st}$. Catch is drawn from the abundance $N_t$ of the same month, after that month's removals, so the observations and the truth refer to one state.
+
+#### Effort allocation
+
+Total monthly effort $E_{\text{tot}}$ is allocated across cells by a multinomial draw on information available before month $t$:
+
+$$\left(E_{1t}, \dots, E_{St}\right) \sim \operatorname{Multinomial}\!\left(E_{\text{tot}},\ w_{\cdot t}\right), \qquad w_{st} = \frac{\exp(\lambda_{st})}{\sum_{s'} \exp(\lambda_{s't})},$$
+
+with the allocation score
+
+$$\lambda_{st} = \beta_\mu\left(1 + \beta_J\,\hat{J}_t\,\mathbb{1}\{\text{contraction}\}\right) b_{s,t-1} - \beta_{\text{dist}}\,\text{dist}_s + \nu_{v(s)},$$
+
+where $b_{s,t-1}$ is the fleet's standardised belief about cell catch rates, updated each month as a blend of its previous belief and the last observed log catch rate (carried forward where a cell went unfished), $\text{dist}_s$ the travel cost from port and $\nu_{v(s)}$ a vessel level efficiency effect. When the contraction mechanism is active an event sharpens the fleet's targeting, so effort concentrates on fewer, better known cells and the fished footprint shrinks. The contraction must enter as an interaction with targeting: a term added to every cell's score cancels in the softmax and has no effect at all, which is how an earlier version of this model rendered the mechanism inert. Because effort magnitude is generated, catch rate is $Y_{st}$ (catch per unit effort) throughout rather than a latent density.
+
+#### Survey
+
+The fishery independent survey samples $n = \lceil c\,S \rceil$ cells without replacement in every $k$th month ($k = 1$ monthly, 3 quarterly, 6 semiannual), either by simple random sampling or with equal allocation across latitude bands. Both designs give equal inclusion probability $p^{\text{inc}} = n / S$; stratification changes the variance of the estimator, not its form. Survey observations follow their own delta lognormal model with catchability $q^{\text{surv}}$ and encounter scale $a^{\text{surv}}$ fixed by protocol, neither of which responds to the event. The design based index is a Horvitz–Thompson total and the centroid is a Hájek ratio,
+
+$$\widehat{B}_t = \sum_{s \in \mathcal{S}_t} \frac{V_{st}}{p^{\text{inc}}}, \qquad \widehat{G}_t = \frac{\sum_{s \in \mathcal{S}_t} y_s\,V_{st}}{\sum_{s \in \mathcal{S}_t} V_{st}},$$
+
+where $\mathcal{S}_t$ is the sampled set and $V_{st}$ the survey catch. The total estimates in frame abundance, $S\,q^{\text{surv}} N_t\,(1 - \pi^{\text{out}}_t)$, not total abundance.
+
+#### Structural non identifiability
+
+Every fishery observation depends on the state only through $\mu_{st} = S\,q_{st} N_t \pi_{st}$. For any strictly positive sequence $a_t$, the reparameterisation
+
+$$N_t^{\star} = a_t\,N_t, \qquad q_{st}^{\star} = \frac{q_{st}}{a_t}$$
+
+leaves $\mu_{st}$ unchanged for every $s$ and $t$, and hence leaves the encounter probability, the positive catch density, the effort allocation (which responds to observed catch rates), the removals (which depend on $q\,\pi\,E$), and the entire fishery likelihood $\mathcal{L}_{\text{fish}}$ invariant:
+
+$$\mathcal{L}_{\text{fish}}\!\left(N_{1:T}, q_{1:S,1:T}\right) = \mathcal{L}_{\text{fish}}\!\left(N_{1:T}^{\star}, q_{1:S,1:T}^{\star}\right).$$
+
+Total abundance and any spatially uniform component of catchability are therefore not separately identified from fishery data alone. The survey observes $S\,q^{\text{surv}} N_t \pi_{st}$ with a catchability that does not carry $a_t$, so it is not invariant under the same reparameterisation and breaks the degeneracy. The spatially structured component $\delta_{\text{sp}} g_s \hat{J}_t$ is not annihilated by a scalar $a_t$ and is identified from fishery data alone. Writing $\beta_N$, $\beta_q$ and $\gamma$ for the log linear responses of abundance, uniform catchability and warm edge catchability to severity, the observed information $\mathcal{I}_{\text{fish}}(\beta_N, \beta_q, \gamma)$ has exactly one zero eigenvalue, in the $(\beta_N, \beta_q)$ direction, while $\mathcal{I}_{\text{fish}} + \mathcal{I}_{\text{surv}}$ is of full rank. Section 4.1 illustrates this on a reduced likelihood; the illustration follows from the functional form above and is not an independent test of it.
+
+#### Estimands
+
+Two targets are carried, because they answer different questions. Every replicate is generated twice under common random numbers: once with the event anomaly as drawn, giving the factual log abundance $\log N_t$ and frame share $1 - \pi^{\text{out}}_t$, and once with the anomaly deleted while climatology, trend, noise field, process noise, fleet and the realised effort allocation are held fixed, giving $\log N^{0}_t$ and $1 - \pi^{\text{out},0}_t$. The event attributable effect on total abundance and on in frame abundance are
+
+$$\Delta_t = \log N_t - \log N^{0}_t, \qquad \Delta^{\text{in}}_t = \Delta_t + \log\!\big(1 - \pi^{\text{out}}_t\big) - \log\!\big(1 - \pi^{\text{out},0}_t\big),$$
+
+and the scalar estimands $\beta$ and $\beta^{\text{in}}$ are the partial slopes of $\Delta_t$ and $\Delta^{\text{in}}_t$ on centred severity $I_t$, controlling for a linear trend and a first order seasonal harmonic:
+
+$$\Delta_t = \alpha + \beta\,I_t + \zeta_1\,\tfrac{t}{T} + \zeta_2 \sin\!\tfrac{2\pi t}{12} + \zeta_3 \cos\!\tfrac{2\pi t}{12} + u_t.$$
+
+The two coincide whenever the event does not move biomass across the frame boundary. Holding the realised allocation fixed makes $\Delta_t$ a direct effect of the event at the fleet's factual behaviour; removals still differ between the two worlds through $q$ and $\pi$. The identical regression is applied to every estimated index, with a Newey–West standard error (Bartlett kernel, three lags) on the severity coefficient so that confidence interval coverage and power can be reported.
+
+#### Index estimators
+
+Each estimator produces a monthly log index to which the estimand regression above is applied. The nominal index is total catch over total effort,
+
+$$\widehat{I}^{\text{nom}}_t = \log \frac{\sum_s Y_{st} E_{st}}{\sum_s E_{st}\,\mathbb{1}\{Y_{st}\ \text{observed}\}} .$$
+
+The delta two way index fits additive cell and month effects to the encounter and positive components,
+
+$$\operatorname{logit} p_{st} = a^{p}_s + b^{p}_t, \qquad \log Y_{st} \mid (Y_{st} > 0) = \mu^{m} + a^{m}_s + b^{m}_t + e_{st},$$
+
+with a light ridge on the cell effects of the encounter component, because cells that are never encountered have no finite maximum likelihood estimate. It predicts on the complete reference grid at fixed effort,
+
+$$\widehat{I}^{\delta}_t = \log\!\left(\frac{1}{S}\sum_{s=1}^{S} \hat{p}_{st}\,\exp\!\big(\hat{\mu}^m + \hat{a}^m_s + \hat{b}^m_t + \tfrac{1}{2}\hat{\sigma}^2_m\big)\right).$$
+
+Cells not fished in a month receive the model's prediction, an imputation whose share is reported; a variant that averages only over the cells fished in that month is reported alongside it. The delta interaction index adds a low dimensional space by severity term $\mathbf{z}_s^{\top}\boldsymbol{\theta}\,I_t$, with $\mathbf{z}_s = (y_s, x_s)$, to each component, producing a standardised density surface on fixed support that can move its own centre of gravity. An integrated fishery plus survey index was fitted in an earlier version; it shared a month effect across streams, so the fishery's catchability change loaded directly onto the shared effect, and it is not reported here (Section 5).
+
+
+### 3.2 Operating model
+
+The state process unfolds on a lattice of twelve latitude bands by twelve cross shelf bands, each cell 50 km on a side, over 96 monthly time steps, and the factual world is simulated in a single sequential loop: effort in a month is allocated from the fleet's belief at the end of the previous month, abundance in that month carries the removals implied by that effort, and catch is drawn from that abundance. The counterfactual world re-runs the state process without the event anomaly, holding the realised allocation and all noise fixed. Temperature in each cell and month is the sum of four components kept deliberately separate: a spatial climatology that cools with latitude and with distance offshore; a seasonal cycle; a chronic warming trend of 0.05 °C per year; and a spatiotemporally correlated noise field with separable spatial and temporal autocorrelation. Onto this baseline we add the heatwave anomaly. Keeping the deterministic climatology, the trend and the event anomaly as distinct terms is what makes the paired counterfactual of Section 2.3 well defined: the counterfactual world is obtained by deleting the event term alone.
+
+Heatwaves are generated by an explicit schedule. Six events per replicate are drawn at random start months (overlapping events merge, and the realised count is recorded) with durations drawn between one and four months and peak anomalies drawn around 2.2 °C. Within each event the anomaly follows a smooth rise and decay. The monthly event severity $J_t$ is the category weighted intensity above the category one threshold, and it is by construction non negative: it drives every biological and fleet response in the model. For estimation only, we use the centred and scaled covariate $I_t$, so that no estimator is handed the sign of the true response through the covariate.
+
+Abundance follows a discrete state transition on the log scale, with a density dependent recovery term, a removal based fishing mortality proportional to the expected catch per unit abundance implied by the month's effort allocation (so that it is non negative, rises with fleet stock overlap and falls when catchability falls), and, when the decline mechanism is active, a response to a lagged thermal dose. The thermal dose is occupancy weighted: it is the sum over cells of the population share in each cell times the excess of temperature over a stress threshold, so that only the temperature actually experienced by the stock, not the domain average, drives the decline. Movement follows a partial adjustment process toward an ideal free target set by the thermal suitability surface, with an explicit refuge state one latitude band beyond the poleward edge of the sampling domain. The refuge experiences the same seasonal cycle, warming trend and event anomaly as the frame, so biomass leaves the frame only when conditions beyond the edge are better than within it. The frame is open by default and closed in a sensitivity comparison, and a refuge with fixed suitability, which behaves as a thermostat, is retained as a second comparison; as Section 4.5 shows, the geometry of the frame and the refuge materially changes how redistribution registers in CPUE and in a survey. Suitability is a Gaussian function of the distance between local temperature and the thermal optimum.
+
+Catchability combines a uniform component and a spatial component. The uniform component multiplies catchability by a factor that declines with event severity, and is the piece that is structurally confounded with abundance. The spatial component, used only in the warm edge cells, reduces catchability in proportion to a normalised latitudinal weight whose domain mean is one, so that the spatial mechanism redistributes catchability across the domain without changing its average level.
+
+### 3.3 Observation model
+
+Catch is observed tow by tow through a delta lognormal process with two parts, an encounter probability and a positive catch distribution, so that the zeros that dominate real catch records enter the index directly rather than being discarded. A cell that receives more effort is observed through more tows: its probability of at least one encounter rises and the variance of its mean catch rate falls. We parameterise the two parts coherently so that the unconditional mean of the observation equals the latent catch rate at any effort: the positive component is centred on the catch rate divided by the encounter probability, so that the encounter probability times the conditional mean returns $\mu_{st}$. This removes an inconsistency that would otherwise bias every index that passes through the delta model.
+
+Fishing effort is generated, not assumed. Total monthly effort is fixed and allocated across cells by a multinomial draw whose probabilities depend on information available before the current month: the catch rate observed in each cell in the previous month, carried forward where a cell went unfished; a travel cost that penalises distance from port; and vessel level efficiency differences. When the contraction mechanism is active, an event sharpens the fleet's targeting of the cells it believes to be best, so effort concentrates on fewer cells during heatwaves and the fished footprint shrinks. Because effort magnitude is generated explicitly, catch rate is catch divided by effort throughout, as in a real fishery, rather than a latent density.
+
+The fishery independent survey samples a fixed fraction of cells without replacement in every kth month, by simple random sampling or with equal allocation across latitude bands, and observes them through its own delta lognormal model with a survey specific catchability, encounter scale and coefficient of variation, none of which responds to the event. Because inclusion probabilities are known and equal, the survey index and its centre of gravity are computed with design based estimators: a Horvitz–Thompson total for the index and a Hájek ratio for the centroid.
+
+### 3.4 Why a fishery independent survey is not simply another catch rate
+
+A survey also records catch and effort, so it is reasonable to ask how a survey index differs from the CPUE whose failure this paper establishes. The arithmetic is indeed the same: both divide catch by effort. What differs is the statistical provenance of the effort and the catchability, and it is those two properties, not the ratio itself, that determine whether the index tracks abundance. Three differences are decisive, and each corresponds to one term in the operating model.
+
+First, effort in a commercial fishery is allocated preferentially. In the model, the multinomial allocation weights depend on the catch rate believed from the previous month, on distance from port, and, during events, on the contraction term; effort therefore goes where fish are expected, so its spatial distribution is correlated with the very state being estimated. A survey allocates effort by design: stations are drawn with known, equal inclusion probabilities that do not depend on abundance. The commercial index is a state weighted average over a non random, self selected footprint, whereas the survey index is a probability weighted average over a footprint fixed in advance. This is the standard distinction between a preferential sample and a probability sample, and it is why the survey total is formed as a Horvitz–Thompson estimator with known inclusion probabilities rather than as a raw ratio.
+
+Second, commercial catchability responds to the driver. In the model the uniform component of catchability, the factor that scales with event severity, is exactly the quantity that is structurally confounded with abundance through the reparameterisation of Section 2.1: multiplying abundance by any positive monthly sequence and dividing catchability by the same sequence leaves every commercial observation unchanged. The survey holds its gear, its tow, and its protocol fixed, so its catchability $q^{\text{surv}}$ is constant and, critically, does not carry that severity dependent factor. In the notation of the invariance, the survey observation $q^{\text{surv}} N_t \pi_{st}$ is not multiplied by $a_t$, so it is not invariant under the reparameterisation and breaks the degeneracy. This is the precise sense in which the survey catchability must be independent of the confounder: were a survey to let its own catchability drift with the heatwave, or were it standardised using the same fleet behaviour that generates the confounding, its information would remain singular and it would recover no more than the fishery does.
+
+Third, the fishery samples only where it fishes, and it stops fishing the warm edge precisely when catchability falls there; the survey samples the whole frame regardless of local catch rates, which is why the survey centroid registers genuine redistribution but not a warm edge catchability change. A survey that shared the fishery's spatial coverage would inherit the same blind spot.
+
+A fourth point concerns what the survey can and cannot see rather than how it samples. A survey of the frame estimates in frame abundance. If an event moves biomass across the frame boundary, in frame and total abundance diverge, and the survey, like the fishery, has no observation of the stock beyond the edge. The survey therefore removes the catchability confound and the effort confound; it does not remove the frame confound, and no design confined to the frame can. This is why two estimands are carried (Section 2.3), and why the survey is benchmarked against in frame abundance, for which it is unbiased, as well as against total abundance, for which it is not when biomass leaves.
+
+A survey index is therefore not privileged because it is a different kind of measurement; it is privileged only when its effort is allocated independently of abundance and its catchability is held constant and known. Those are design choices, not automatic properties of survey data, and a poorly designed survey that violated either would be as confounded as the fishery. The results that follow quantify how much of a well designed survey is needed: the abundance signal is recovered only once coverage is adequate (Section 4.4), and at very low coverage the survey fails through sampling variance rather than through the structural confounding that defeats the fishery, which is a different and more tractable kind of failure.
+
+### 3.5 Estimators
+
+We benchmark a graded sequence of estimators rather than a single index, so that biases which a better model can remove are separated from confounds which no model can remove. The nominal index is total catch over total effort, standardised only for the trend and seasonal terms. The positive only index is the classical demeaned log CPUE computed on positive catches alone, discarding zeros, and stands in for the still common practice that the delta model is meant to replace. The delta two way index fits an encounter and a positive component, each with additive cell and month effects, and predicts onto the complete reference grid at fixed reference effort, so that the index reflects the modelled density rather than where effort happened to go. The delta index with a spatial severity interaction adds a low dimensional interaction between position and event severity to the two way model, giving a standardised density surface on fixed support that is free to move with the event; this is required for the centroid diagnostic, because a purely additive model has a spatial shape that is fixed by construction and cannot move its own centre of gravity (Thorson et al., 2016a). Because the fleet contracts away from part of the domain during events, the delta model's prediction for unfished cells is an imputation; its share is reported, and a variant that averages the fitted density only over the cells fished in each month is reported alongside the full grid index so that the influence of the imputation can be judged. The survey index is the design based total described above, with a model based counterpart fitted to the survey observations for comparison.
+
+Every index is reduced to a single heatwave coefficient by the same regression: the partial slope of the log index on centred event severity, controlling for a linear time trend and a first order seasonal harmonic, with a Newey–West standard error on the severity term. Applying an identical specification to the estimands and to every estimator guarantees that all coefficients target the same quantities, and the standard error lets us report, for each estimator, the coverage of its 95 percent interval and its power to reject a zero effect.
+
+### 3.6 Spatial and temporal diagnostics
+
+Two spatial centroids are reported and kept conceptually distinct. The fleet weighted catch centroid is the catch weighted mean position of the fishery, a description of where the fleet operated; it is a fishery use indicator, not an unbiased estimator of the stock's location. The fixed reference grid centroid is the mean position of the standardised density surface from the delta interaction model, which is an estimator of the stock's distribution. Alongside these we compute the survey centroid from the design based survey. Each centroid is summarised by its event contrast, the mean poleward position during event months minus the mean outside them, and compared against the centroid of the latent distribution, which is known.
+
+The temporal question, whether a contemporaneous specification can capture a lagged and cumulative decline, is addressed by fitting a contemporaneous model and a penalised distributed lag model to two targets. The primary target is the survey index, detrended and deseasonalised, which is what an analyst can observe; the second is the true event attributable effect, which bounds what any model of the lag structure could recover. The distributed lag spans a twenty four month window covering the memory of the accumulating stock, estimates the lag weights rather than supplying them, and penalises their second differences with a smoothing parameter selected by generalised cross validation. The two models are compared on blocked out of sample prediction with the smoothing parameter re-selected inside each training block, so that no information from a held out block enters its choice, which separates description of the mechanism from short horizon predictive skill without favouring the more flexible model.
+
+## 4. Results
+
+Unless otherwise stated, results are Monte Carlo means over 400 replicates per scenario under common random numbers; the largest Monte Carlo standard error of any estimator mean in Table 1 is 0.002. Every comparison is made against the paired counterfactual estimands of Section 2.3: the event effect on total abundance and on in frame abundance. The operating model behaves as intended (Figure 1): during a heatwave the thermal field warms the domain, the stock density contracts toward the cool poleward edge, and catchability falls at the warm edge, all emerging from the single thermal driver. The simulated observations reproduce the features that make CPUE difficult to interpret (Figure 2): a strongly seasonal temperature field punctuated by events, catch rates that are zero on roughly half of fished cells and right skewed where positive, and a fished footprint that fluctuates with the fleet's beliefs. The dynamics make the confounding concrete (Figure 3): under each mechanism the observed indices are shown against both truths over time, and the nominal index departs from them event by event.
+
+![Figure 1. Spatial fields at the peak of a heatwave in a cell with every mechanism active, including warm edge catchability. (a) Sea temperature over the domain (north up, inshore at left). (b) Stock density, contracted toward the cool poleward edge. (c) Catchability anomaly relative to the pre event level, reduced at the warm equatorward edge.](figures/fig1_spatial_fields.png)
+
+![Figure 2. Simulated observations in the mixed case. (a) Domain mean temperature with heatwave months shaded. (b) The thermal suitability curve with the density of realised temperatures behind it. (c) Distribution of log positive CPUE, with the fraction of fished cells returning zero catch noted. (d) Fraction of cells fished over the series.](figures/fig2_data_distributions.png)
+
+![Figure 3. Index trajectories under each mechanism, one representative replicate per panel, with heatwave months shaded. The event effect on total abundance (black) and on in frame abundance (grey dashed) are shown against the nominal CPUE, delta and survey indices, all centred. Under redistribution the two truths separate and the survey follows the in frame truth. Colours identify estimators consistently across the figure suite.](figures/fig3_trajectories.png)
+
+### 4.1 Structural non identifiability, and what is identified
+
+The invariance argument of Section 2.1 says that the observed information for the pair of abundance and uniform catchability slopes is singular under a fishery only likelihood, and the reduced likelihood of Section 3.1 confirms it in the way such an illustration can: its eigenvalues are approximately 1209 and 0, the second zero to numerical precision, and the profile likelihood in the abundance slope is flat to within 2e-07 log likelihood units over a range of 0.9 in the slope (Figure 9c). Adding survey observations with protocol fixed catchability gives eigenvalues of about 2287 and 387 and a profile spanning 322 log likelihood units over the same range. We stress that this is a consequence of the functional form of the observation model rather than an independent test of it; its value is in making the flat direction concrete. The informative check is the third parameter. Adding a warm edge catchability slope that multiplies a cell level weight, the three parameter fishery only information has eigenvalues 2900, 190, 5e-13: exactly one flat direction, the uniform one, and a curved profile in the spatial slope from fishery data alone (Figure 9d). Spatially structured catchability is identified without a survey; spatially uniform catchability is not. That distinction organises the rest of the results.
+
+### 4.2 Which estimators recover which estimand
+
+Figure 5 and Table 1 report every estimator's heatwave coefficient across the sixteen cells of the factorial and the four warm edge cells, against both estimands, and Figure 4 shows the sampling distributions of the key quantities across replicates. Three patterns hold across every cell.
+
+First, under a pure decline every index that keeps its zeros recovers the effect: with a truth of -0.024 the nominal index reads -0.028, the delta model -0.028 and the survey -0.024. The positive only index is erratic rather than merely attenuated, reading -0.007 without the fleet contraction and -0.028 with it, because the zeros it discards carry the contraction's signal. A decline that is not accompanied by any change in catchability or distribution is not hard to see in CPUE; the difficulty is that heatwaves do not produce such declines.
+
+Second, no fishery index is robust to uniform catchability change, and nothing in the fishery data can make it so. Under catchability loss with no change in abundance, the nominal index reads -0.038, the delta model -0.043 and the delta model with a spatial interaction -0.042, all reporting a decline that did not occur, while the survey reads -0.001. When decline and catchability loss coincide, the nominal coefficient (-0.069) is 3 times the true effect (-0.023) and the delta model is no better (-0.072); the survey reads -0.026. This is the structural result of Section 4.1 showing up in finite samples, and it is the same under every combination of the other factors.
+
+Third, redistribution separates the two estimands, and the estimators sort themselves by which one they track. Under redistribution with no change in abundance, the effect on total abundance is zero while the effect on in frame abundance is -0.010, because an event moves 3 percent of the stock across the poleward boundary. The survey, which samples the frame, reads -0.008: it is unbiased for in frame abundance and biased for total abundance by exactly the frame share. Across all ten cells in which redistribution is active, the survey's error against in frame abundance is at most 0.003, within the Monte Carlo standard error, while its error against total abundance is close to -0.010 in every one of them. The delta model with a spatial severity interaction, which lets the standardised density surface move, tracks in frame abundance when decline and redistribution coincide (-0.025 against -0.025) and recovers part of it under pure redistribution (-0.004 against -0.010), in both cases far closer than the fixed shape models; this is a success of spatially explicit standardisation, and it means the availability confound, unlike the catchability confound, has a fishery only remedy. The nominal index does not have one. It reads -0.045 under pure redistribution, several times the in frame effect, because the fleet's belief about where fish are lags the stock, and the two way delta model, whose spatial shape is fixed, reads -0.035.
+
+The fleet's event driven contraction, a factor in its own right in this design, has small effects. Alone it is harmless (nominal 0.001 against a truth of zero); it shrinks the fished footprint by 0.022 of the domain during events, and its interactions with the biological factors are of order 0.003 (Table 2). Because the fleet contracts away from part of the domain, the delta model's full grid prediction imputes 71 percent of cells in event months; the fished cells only variant differs from the full grid index by at most 0.005 in any cell, so the imputation is not what drives the delta model's behaviour here. All two way solvers converged in 100 percent of replicates.
+
+![Figure 4. Sampling distributions over replicates for four scenarios (violins, with the replicate mean as a bar). (a) Nominal CPUE coefficient; (b) survey coefficient; the event effect on total abundance is the black cross and on in frame abundance the grey circle. (c) Fishery catch centroid shift, with the latent centroid shift as the black bar.](figures/fig4_sampling_distributions.png)
+
+![Figure 5. Heatwave effect on the log index by scenario across the 2³ biological design with the fleet contraction active. Grouped bars give the mean coefficient of each estimator with replicate 95 percent intervals; the event effect on total abundance (black) and on in frame abundance (grey dashed) are drawn across each group. The survey lands on the in frame truth in every cell; no fishery index is robust to uniform catchability change.](figures/fig5_effect_by_case.png)
+
+| Scenario | Truth (total) | Truth (in frame) | Nominal | Positive only | Delta | Delta, fished cells | Delta + interaction | Survey |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| None | 0.000 | 0.000 | -0.001 | -0.000 | -0.001 | -0.001 | -0.000 | -0.001 |
+| None (fleet contraction) | 0.000 | 0.000 | 0.001 | -0.008 | -0.000 | 0.001 | -0.001 | -0.000 |
+| Catchability | 0.000 | 0.000 | -0.038 | -0.017 | -0.040 | -0.038 | -0.038 | 0.001 |
+| Catchability (fleet contraction) | 0.000 | 0.000 | -0.038 | -0.027 | -0.043 | -0.039 | -0.042 | -0.001 |
+| Redistribution | 0.000 | -0.010 | -0.049 | -0.017 | -0.034 | -0.036 | -0.008 | -0.010 |
+| Redistribution (fleet contraction) | 0.000 | -0.010 | -0.045 | -0.029 | -0.035 | -0.034 | -0.004 | -0.008 |
+| Redistribution + Catchability | 0.001 | -0.010 | -0.090 | -0.034 | -0.076 | -0.076 | -0.048 | -0.009 |
+| Redistribution + Catchability (fleet contraction) | 0.001 | -0.010 | -0.084 | -0.047 | -0.074 | -0.072 | -0.045 | -0.011 |
+| Abundance | -0.024 | -0.024 | -0.023 | -0.007 | -0.025 | -0.024 | -0.024 | -0.026 |
+| Abundance (fleet contraction) | -0.024 | -0.024 | -0.028 | -0.028 | -0.028 | -0.029 | -0.028 | -0.024 |
+| Abundance + Catchability | -0.023 | -0.023 | -0.064 | -0.018 | -0.066 | -0.065 | -0.064 | -0.025 |
+| Abundance + Catchability (fleet contraction) | -0.023 | -0.023 | -0.069 | -0.041 | -0.072 | -0.072 | -0.070 | -0.026 |
+| Abundance + Redistribution | -0.015 | -0.025 | -0.065 | -0.020 | -0.051 | -0.052 | -0.026 | -0.025 |
+| Abundance + Redistribution (fleet contraction) | -0.015 | -0.025 | -0.059 | -0.035 | -0.047 | -0.049 | -0.025 | -0.024 |
+| Abundance + Redistribution + Catchability | -0.014 | -0.025 | -0.103 | -0.032 | -0.091 | -0.091 | -0.065 | -0.021 |
+| Abundance + Redistribution + Catchability (fleet contraction) | -0.014 | -0.025 | -0.098 | -0.049 | -0.088 | -0.088 | -0.063 | -0.024 |
+| Warm edge catchability | 0.001 | 0.001 | -0.108 | -0.040 | -0.109 | -0.106 | -0.091 | 0.000 |
+| Warm edge catchability (fleet contraction) | 0.001 | 0.001 | -0.107 | -0.054 | -0.110 | -0.105 | -0.095 | 0.000 |
+| Warm edge catch. + redistribution | 0.001 | -0.009 | -0.142 | -0.045 | -0.125 | -0.124 | -0.080 | -0.009 |
+| Warm edge catch. + redistribution (fleet contraction) | 0.001 | -0.009 | -0.141 | -0.063 | -0.129 | -0.126 | -0.078 | -0.009 |
+
+Table 1. Mean heatwave coefficient of each estimator by scenario (400 replicates per cell; maximum Monte Carlo standard error 0.002). The two truth columns are the event attributable effects on total and on in frame abundance; they differ only where redistribution moves biomass across the frame boundary.
+
+A four way analysis of variance over the factorial (Table 2) quantifies how the mechanisms combine. For the nominal index the main effects of redistribution (-0.049) and catchability (-0.037) are larger than the abundance main effect (-0.023), the contraction main effect is 0.002, and the two way interactions are an order of magnitude smaller than the main effects. For the survey the abundance main effect (-0.025) and the redistribution main effect (-0.009, the frame share) are the only ones that matter, and the catchability main effect is 0.002. The mechanisms are close to additive on the coefficient scale, but not exactly so; reporting the interaction terms, rather than assuming additivity, is what licenses that statement.
+
+| Term | Nominal | (SE) | Delta | (SE)  | Survey | (SE)   |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Abundance | -0.0225 | 0.0021 | -0.0246 | 0.0023 | -0.0252 | 0.0021 |
+| Redistribution | -0.0487 | 0.0021 | -0.0335 | 0.0023 | -0.0089 | 0.0021 |
+| Catchability | -0.0372 | 0.0021 | -0.0390 | 0.0023 | 0.0018 | 0.0021 |
+| Contraction | 0.0022 | 0.0021 | 0.0003 | 0.0023 | 0.0006 | 0.0021 |
+| Abundance × Redistribution | 0.0073 | 0.0030 | 0.0075 | 0.0033 | 0.0100 | 0.0029 |
+| Abundance × Catchability | -0.0034 | 0.0030 | -0.0023 | 0.0033 | -0.0010 | 0.0029 |
+| Redistribution × Catchability | -0.0030 | 0.0030 | -0.0027 | 0.0033 | -0.0008 | 0.0029 |
+| Abundance × Contraction | -0.0065 | 0.0030 | -0.0036 | 0.0033 | 0.0013 | 0.0029 |
+| Redistribution × Contraction | 0.0026 | 0.0030 | -0.0007 | 0.0033 | 0.0008 | 0.0029 |
+| Catchability × Contraction | -0.0022 | 0.0030 | -0.0033 | 0.0033 | -0.0025 | 0.0029 |
+
+Table 2. Main effects and two way interactions from a four way analysis of variance of the heatwave coefficient over the 2⁴ factorial (estimate with Monte Carlo standard error), for the nominal, delta and survey indices.
+
+### 4.3 Availability and warm edge catchability are separated only by an independent survey
+
+Figure 8 and Table 3 report the centroid diagnostics. Under pure redistribution the latent centroid shifts poleward by 0.30 grid bands during events; the fleet weighted fishery centroid recovers 0.26 of that, the survey centroid 0.28 and the delta surface centroid 0.22. The scalar coefficient on total abundance is blind to this movement, so the spatial diagnostic adds real information. The warm edge catchability cells show why that information is not sufficient on its own. When catchability declines only at the warm edge, with no change in abundance or distribution, the fishery centroid shifts poleward by 0.20 bands, imitating a genuine redistribution, because the warm edge cells stop contributing catch and the catch weighted centre of mass moves away from them; the survey centroid moves by 0.00. The centre of gravity of an independent survey is therefore the diagnostic that separates true movement from a warm edge catchability artefact; the fishery centroid alone cannot make that separation, and neither can the fishery index, which reads -0.107 against a truth of 0.001.
+
+![Figure 8. Warm edge catchability stress test. (a) Poleward centroid shift during events for the fishery catch centroid and the survey centroid under redistribution, warm edge catchability, and both; the latent centroid shift is the black bar. (b) The heatwave coefficient of the nominal CPUE and the survey index for the same cells against the in frame truth. The survey centroid moves only under genuine redistribution. Bars carry replicate 95 percent intervals.](figures/fig8_spatial_catchability.png)
+
+| Scenario | Latent truth | Fishery catch centroid | Delta surface centroid | Survey centroid | Frame share change | Footprint change |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| None (fleet contraction) | 0.000 | 0.007 | -0.004 | 0.000 | 0.000 | -0.022 |
+| Abundance (fleet contraction) | 0.000 | 0.018 | -0.006 | 0.002 | 0.000 | -0.027 |
+| Redistribution (fleet contraction) | 0.303 | 0.260 | 0.219 | 0.282 | 0.030 | -0.026 |
+| Catchability (fleet contraction) | 0.000 | 0.005 | -0.006 | 0.004 | 0.000 | -0.023 |
+| Warm edge catchability (fleet contraction) | 0.000 | 0.199 | 0.186 | 0.004 | 0.000 | -0.022 |
+| Warm edge catch. + redistribution (fleet contraction) | 0.303 | 0.409 | 0.379 | 0.285 | 0.030 | -0.024 |
+| Abundance + Redistribution + Catchability (fleet contraction) | 0.303 | 0.278 | 0.208 | 0.286 | 0.030 | -0.026 |
+
+Table 3. Centroid diagnostics by scenario: event contrast of the poleward position (grid bands) of the latent distribution, the fishery catch centroid, the delta interaction surface and the survey, with the event contrast of the frame share and of the fished footprint.
+
+### 4.4 What a survey must look like to recover the effect
+
+Figure 6 and Table 4 report the survey design curve for the decline plus uniform catchability cell with the fleet contraction active, the case in which the fishery is most badly misled. The abundance estimand here is a real decline that the fishery indices overstate: the nominal and delta indices sit at a root mean squared error of 0.058 and 0.065 against the true effect regardless of any survey, and their 95 percent intervals cover the truth in 55 percent and 54 percent of replicates: they are confidently wrong. A monthly survey of 7 stations (84 tows a year) already has a lower error (0.043) than either fishery index, 14 stations bring it to 0.031 with interval coverage of 87 percent, and the curve flattens beyond that. At three stations a month the survey is still competitive on median error but unstable in its tails, because a month in which no station catches anything is common (2.53 such months per series on average) and the log index then carries no information.
+
+Frequency matters more than station count. A quarterly survey needs 29 stations per survey (116 tows a year) merely to match the fishery's error (0.091), its error is dominated by occasional large misses (median absolute error 0.026 against a root mean squared error two to four times larger at every station count), and its interval coverage falls to 81 percent because thirty two observations over eight years leave little room for the trend and seasonal controls. A semiannual survey cannot separate the seasonal sine and cosine at all, since it samples the same two months every year; the regression drops one of them, the standard error is no longer trustworthy (coverage 60 percent), and the apparent power of that design in Figure 6b is an artefact of undercoverage, which is why those points are drawn open. An annual survey is not estimable for an event scale effect within an eight year series. Stratifying the monthly survey by latitude band does not change the design curve at this coverage (Table 4), because the inclusion probabilities are the same and the between band variance is small relative to the within band variance of a delta lognormal catch.
+
+Power is the sobering column. At 14 stations a month the survey rejects a zero effect in 24 percent of replicates for a true decline of -0.023 per standard deviation of severity, rising only to 35 percent at 58 stations: the effect is small relative to the month to month variability of a catch rate, and station count buys precision slowly once the survey is no longer sparse. The fishery indices reject in 75 percent of replicates, but that is the power to detect a biased effect, not the true one. The survey is the only index that is right; it is right with wide intervals.
+
+![Figure 6. Survey design curve for the decline plus catchability cell. (a) Root mean squared error against the abundance estimand versus tows per year (both axes logarithmic) for a monthly, quarterly and semiannual simple random survey, with bootstrap 95 percent bands; the fishery indices do not use the survey and are flat. (b) Power to reject a zero effect; open points mark designs whose 95 percent interval covers the truth in fewer than 80 percent of replicates, for which the power is not meaningful.](figures/fig6_survey_coverage.png)
+
+| Survey CV | Design | Every (months) | Stations | Tows per year | Survey RMSE | 95% interval | Survey MAE | Empty months | CI coverage | Power | Nominal RMSE | Delta RMSE |
+| ---: | :--- | ---: | ---: | ---: | ---: | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0.450 | srs | 1 | 3 | 36 | 0.075 | [0.068, 0.082] | 0.051 | 2.527 | 0.813 | 0.210 | 0.058 | 0.065 |
+| 0.450 | srs | 1 | 7 | 84 | 0.043 | [0.037, 0.050] | 0.027 | 0.100 | 0.853 | 0.220 | 0.058 | 0.065 |
+| 0.450 | srs | 1 | 14 | 168 | 0.031 | [0.029, 0.034] | 0.021 | 0.000 | 0.867 | 0.240 | 0.058 | 0.065 |
+| 0.450 | srs | 1 | 29 | 348 | 0.021 | [0.020, 0.023] | 0.015 | 0.000 | 0.887 | 0.307 | 0.058 | 0.065 |
+| 0.450 | srs | 1 | 58 | 696 | 0.016 | [0.015, 0.018] | 0.011 | 0.000 | 0.923 | 0.353 | 0.058 | 0.065 |
+| 0.450 | srs | 3 | 3 | 12 | 0.416 | [0.153, 0.682] | 0.088 | 0.813 | 0.687 | 0.300 | 0.058 | 0.065 |
+| 0.450 | srs | 3 | 7 | 28 | 0.132 | [0.102, 0.161] | 0.057 | 0.020 | 0.693 | 0.333 | 0.058 | 0.065 |
+| 0.450 | srs | 3 | 14 | 56 | 0.212 | [0.065, 0.405] | 0.039 | 0.000 | 0.733 | 0.327 | 0.058 | 0.065 |
+| 0.450 | srs | 3 | 29 | 116 | 0.091 | [0.043, 0.145] | 0.026 | 0.000 | 0.810 | 0.330 | 0.058 | 0.065 |
+| 0.450 | srs | 3 | 58 | 232 | 0.178 | [0.050, 0.300] | 0.024 | 0.000 | 0.733 | 0.403 | 0.058 | 0.065 |
+| 0.450 | srs | 6 | 3 | 6 | 0.535 | [0.395, 0.670] | 0.123 | 0.400 | 0.565 | 0.428 | 0.058 | 0.065 |
+| 0.450 | srs | 6 | 7 | 14 | 0.506 | [0.271, 0.691] | 0.082 | 0.023 | 0.609 | 0.406 | 0.058 | 0.065 |
+| 0.450 | srs | 6 | 14 | 28 | 0.381 | [0.184, 0.586] | 0.071 | 0.000 | 0.565 | 0.424 | 0.058 | 0.065 |
+| 0.450 | srs | 6 | 29 | 58 | 0.338 | [0.124, 0.551] | 0.058 | 0.000 | 0.601 | 0.431 | 0.058 | 0.065 |
+| 0.450 | srs | 6 | 58 | 116 | 0.258 | [0.160, 0.347] | 0.043 | 0.000 | 0.620 | 0.489 | 0.058 | 0.065 |
+| 0.450 | strat | 1 | 3 | 36 | 0.075 | [0.068, 0.082] | 0.051 | 2.527 | 0.813 | 0.210 | 0.058 | 0.065 |
+| 0.450 | strat | 1 | 7 | 84 | 0.043 | [0.038, 0.050] | 0.027 | 0.100 | 0.853 | 0.220 | 0.058 | 0.065 |
+| 0.450 | strat | 1 | 14 | 168 | 0.030 | [0.027, 0.032] | 0.019 | 0.000 | 0.843 | 0.277 | 0.058 | 0.065 |
+| 0.450 | strat | 1 | 29 | 348 | 0.020 | [0.019, 0.022] | 0.013 | 0.000 | 0.860 | 0.340 | 0.058 | 0.065 |
+| 0.450 | strat | 1 | 58 | 696 | 0.016 | [0.015, 0.018] | 0.010 | 0.000 | 0.923 | 0.347 | 0.058 | 0.065 |
+| 0.900 | srs | 1 | 3 | 36 | 0.103 | [0.095, 0.112] | 0.078 | 2.527 | 0.783 | 0.197 | 0.058 | 0.065 |
+| 0.900 | srs | 1 | 7 | 84 | 0.056 | [0.049, 0.063] | 0.036 | 0.100 | 0.880 | 0.173 | 0.058 | 0.065 |
+| 0.900 | srs | 1 | 14 | 168 | 0.042 | [0.039, 0.045] | 0.031 | 0.000 | 0.827 | 0.210 | 0.058 | 0.065 |
+| 0.900 | srs | 1 | 29 | 348 | 0.027 | [0.025, 0.029] | 0.020 | 0.000 | 0.867 | 0.253 | 0.058 | 0.065 |
+| 0.900 | srs | 1 | 58 | 696 | 0.021 | [0.020, 0.023] | 0.015 | 0.000 | 0.897 | 0.310 | 0.058 | 0.065 |
+
+Table 4. Survey design curve: root mean squared and median absolute error of the survey index against the abundance estimand with bootstrap 95 percent intervals, 95 percent interval coverage and power, the mean number of survey months with no catch, and the coverage independent errors of the two fishery indices, by survey coefficient of variation, design, frequency and stations.
+
+### 4.5 Frame geometry and the sign of the redistribution artefact
+
+An earlier version of this framework reported that redistribution turns the CPUE coefficient positive when the frame is closed and negative when it is open. Neither half of that claim survives the corrected model, and the correction is instructive (Figure 10, Table 6). Under a refuge that experiences the same ocean as the frame, an event moves 3 percent of the stock beyond the poleward edge, the in frame effect is -0.010, and the survey reads -0.010. Under a refuge with fixed near optimal suitability, the specification of the earlier version, the sign of the frame share change reverses: the heatwave warms the cool northern frame toward the thermal optimum, the frame becomes more attractive than a refuge that never warms, and 3 percent of the stock moves *into* the frame during events, so the in frame effect is 0.007 and the survey reads 0.008. The earlier version's positive survey coefficient under redistribution, which it described as "centred on zero", was this influx. A refuge that does not warm is a thermostat, and the direction in which it moves biomass is an artefact of the specification rather than a property of heatwaves.
+
+The nominal index, by contrast, falls under redistribution in every frame setting: -0.036 closed, -0.045 open with a dynamic refuge, -0.028 open with a static one. The sign of the redistribution artefact in CPUE is set by whether the fleet tracks the stock faster than the stock moves, not by the geometry of the frame; here the fleet's belief lags the stock, so catch rates fall where the fleet keeps fishing. The positive hyperstable coefficient of the classical literature requires a fleet that follows the stock into its contracted range; consistently, the sensitivity analysis of Section 4.7 shows the nominal artefact growing with the stock's movement rate and shrinking when the fleet contracts onto the cells it knows best, while the fleet's learning rate on its own has little effect. The practical lesson is that the sign of a redistribution artefact is not universal, and that an attribution exercise must consider the fleet's behaviour relative to the stock's movement rather than assuming hyperstability.
+
+![Figure 10. Frame geometry. Heatwave coefficients of the nominal, delta and survey indices against both truths for the redistribution cells under a closed frame, an open frame with a static refuge, and an open frame with a dynamic refuge (the default). The survey tracks in frame abundance in every setting; which way in frame abundance moves depends on whether the refuge warms with the frame.](figures/fig10_frame_geometry.png)
+
+| Frame | Scenario | Truth (total) | Truth (in frame) | Frame share change | Nominal | Delta | Survey |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| closed | Abundance + Redistribution | -0.016 | -0.016 | 0.000 | -0.057 | -0.044 | -0.015 |
+| open_static | Abundance + Redistribution | -0.014 | -0.007 | -0.025 | -0.045 | -0.034 | -0.007 |
+| open_dynamic | Abundance + Redistribution | -0.015 | -0.026 | 0.030 | -0.066 | -0.053 | -0.025 |
+| closed | Abundance + Redistribution (fleet contraction) | -0.016 | -0.016 | 0.000 | -0.050 | -0.038 | -0.020 |
+| open_static | Abundance + Redistribution (fleet contraction) | -0.014 | -0.007 | -0.025 | -0.040 | -0.029 | -0.007 |
+| open_dynamic | Abundance + Redistribution (fleet contraction) | -0.015 | -0.026 | 0.030 | -0.059 | -0.046 | -0.024 |
+| closed | Redistribution | 0.000 | 0.000 | 0.000 | -0.042 | -0.026 | 0.001 |
+| open_static | Redistribution | 0.000 | 0.007 | -0.025 | -0.032 | -0.020 | 0.011 |
+| open_dynamic | Redistribution | 0.000 | -0.010 | 0.030 | -0.050 | -0.035 | -0.012 |
+| closed | Redistribution (fleet contraction) | 0.000 | 0.000 | 0.000 | -0.036 | -0.024 | 0.000 |
+| open_static | Redistribution (fleet contraction) | 0.000 | 0.007 | -0.025 | -0.028 | -0.017 | 0.008 |
+| open_dynamic | Redistribution (fleet contraction) | 0.000 | -0.010 | 0.030 | -0.045 | -0.034 | -0.010 |
+
+Table 6. Frame geometry experiment: both estimands, the event contrast of the frame share, and three indices, for the redistribution cells under three frame settings (250 replicates per cell).
+
+### 4.6 A distributed lag describes the lagged response; it does not predict better out of sample
+
+The temporal experiment gives the operating model a genuine three month lag between thermal stress and the abundance response, with slow recovery so that the effect is cumulative and persistent, and fits a contemporaneous model and a penalised distributed lag model to two targets on a common centred scale (Table 7). The primary target is the survey index with trend and season removed, which is what an analyst can observe. There, the distributed lag raises the coefficient of determination from 0.02 to 0.19 and its fitted series correlates with the true event effect at 0.24 against 0.09 for the contemporaneous model, with about 7 effective degrees of freedom in the lag weights; the recovered weights (Figure 7b) have their mass spread over the window, the delayed and cumulative shape of the true response. Fitted to the true effect itself, which bounds what any such model could recover, the distributed lag reaches a correlation of 0.51 against 0.14. A contemporaneous model is structurally unable to represent a lagged, accumulating response, and the experiment bears this out.
+
+The caution is equally clear. On blocked out of sample prediction, with the smoothing parameter re-selected inside each training block so that no information leaks from the held out block, the distributed lag does not beat the contemporaneous model on either target (root mean squared error 0.55 against 0.44 on the survey index), because its additional parameters add variance that offsets the reduction in bias. The distributed lag is the better description of the mechanism; it is not the better short horizon predictor, and the two criteria should not be conflated.
+
+![Figure 7. Temporal recovery of a lagged, cumulative decline from the observed survey index. (a) The true event effect (black) against a contemporaneous model and a penalised distributed lag model fitted to the detrended survey index, on the same centred scale, with heatwave months shaded; the correlation of each fitted series with the truth is annotated. (b) The estimated distributed lag weights across replicates (mean with interquartile band), with the smoothing parameter chosen by generalised cross validation.](figures/fig7_temporal.png)
+
+| Target | R² acute | R² dist. lag | Corr. acute | Corr. dist. lag | OOS RMSE acute | OOS RMSE dist. lag | Effective df |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Survey index (observed) | 0.016 | 0.187 | 0.102 | 0.399 | 0.437 | 0.545 | 7.429 |
+| True event effect (upper bound) | 0.031 | 0.307 | 0.143 | 0.512 | 0.406 | 0.569 | 4.727 |
+
+Table 7. Temporal experiment (300 replicates): in sample fit, correlation with the target, blocked out of sample root mean squared error with nested smoothing selection, and effective degrees of freedom, for two targets.
+
+### 4.7 Global sensitivity
+
+A space filling design over fifteen parameters that are otherwise held fixed, evaluated at 200 design points with 20 replicates each, identifies which of them govern the confounds (Figure 9e, f; Table 8). The bias of the nominal index is governed by four parameters of comparable weight: it shrinks when the fleet contracts onto its best known cells during events (standardised regression coefficient 0.00), and grows with the stock's movement rate (-0.12), the magnitude of catchability loss (-0.58) and the number of events (-0.31), with a design level coefficient of determination of 0.53; the fleet's learning rate matters little (0.07). The survey's error against in frame abundance is governed by its own design, survey coverage (-0.44) and encounter scale (-0.36), and by the size of the effect being estimated (0.33), while its bias against total abundance is governed by the movement rate (-0.38), the number of events and niche breadth, the parameters that set how much biomass crosses the frame boundary, and not by anything about the fishery. The qualitative conclusions are therefore stable across a wide region of parameter space.
+
+![Figure 9. (a) Attribution gap, the nominal coefficient minus the true effect, over the decline rate and the uniform catchability reduction. (b) The observed nominal coefficient over the same plane with the contour along which it is zero: opposite truths give the same observation along that ridge. (c) Profile log likelihood in the abundance response from the reduced likelihood: fishery only (flat) and fishery plus survey. (d) Profile in the warm edge catchability slope from fishery data alone, which is curved: spatial catchability is identified. (e, f) Standardised regression coefficients of the nominal attribution gap and of the survey's bias for total abundance on fifteen operating model parameters.](figures/fig9_sensitivity_identifiability.png)
+
+| Parameter | Nominal gap | Survey RMSE (in frame) | Survey bias (total) | Nominal sign error |
+| :--- | ---: | ---: | ---: | ---: |
+| delta_dep | -0.575 | 0.012 | 0.020 | -0.213 |
+| n_events | -0.307 | 0.045 | -0.361 | -0.351 |
+| kappa | -0.202 | 0.331 | 0.004 | 0.058 |
+| sigma_th | 0.155 | -0.056 | 0.176 | 0.034 |
+| rho_move | -0.116 | -0.181 | -0.381 | -0.104 |
+| F_scale | -0.091 | 0.085 | -0.047 | 0.181 |
+| warm_trend | -0.081 | 0.104 | -0.242 | 0.060 |
+| belief_lr | 0.072 | -0.017 | -0.022 | 0.068 |
+| sigma_log | 0.052 | -0.064 | -0.019 | -0.040 |
+| a0 | 0.040 | 0.027 | 0.029 | -0.060 |
+| cv_surv | 0.029 | 0.179 | -0.100 | -0.054 |
+| a_surv | 0.026 | -0.355 | 0.038 | -0.006 |
+| beta_mu | 0.019 | -0.048 | -0.085 | -0.004 |
+| surv_cover | -0.014 | -0.444 | -0.112 | -0.061 |
+| beta_J | 0.004 | 0.074 | -0.067 | 0.150 |
+
+Table 8. Standardised regression coefficients of four summaries on the fifteen parameters of the sensitivity design (design level R² = 0.53, 0.59, 0.40, 0.29 for the four columns in order).
+
+### 4.8 A diagnostic key and its error rate
+
+The mechanisms leave a joint signature across the estimators: a decline lowers both the delta and the survey index; redistribution moves the fishery and survey centroids together and lowers the survey index by the frame share; uniform catchability lowers the fishery indices but not the survey; warm edge catchability moves the fishery centroid but not the survey centroid. Treating this as a classification problem, we learn decision thresholds on a training half of the replicates and evaluate them on a held out half. The resulting key assigns the correct mechanism to 51 percent of held out replicates across six classes, against a chance rate near 17 percent, and returns an indeterminate verdict on 11 percent (Table 5). The confusion structure is informative in its own right: redistribution and warm edge catchability are recovered reliably, whereas abundance decline and uniform catchability are the pair most often confused with each other, exactly as the identifiability analysis predicts. The key is thus useful but explicitly probabilistic, and its principal value is to make the residual ambiguity between abundance and catchability quantitative rather than to resolve it.
+
+| Truth | none | abundance | redistribution | uniform catchability | warm edge catchability | mixed | indeterminate |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| none | 178 | 0 | 0 | 3 | 0 | 0 | 22 |
+| abundance | 98 | 25 | 0 | 25 | 3 | 1 | 42 |
+| redistribution | 25 | 2 | 226 | 29 | 45 | 30 | 47 |
+| uniform catchability | 73 | 4 | 1 | 98 | 2 | 0 | 20 |
+| warm edge catchability | 0 | 2 | 6 | 35 | 154 | 0 | 4 |
+| mixed | 4 | 8 | 83 | 32 | 12 | 36 | 25 |
+
+Table 5. Confusion matrix of the mechanism classifier on held out replicates, with thresholds learned on a disjoint training half.
+
+## 5. Discussion
+
+The central result is a negative one made precise and then made useful. Nominal and even well standardised CPUE indices cannot, as a matter of the likelihood, separate a heatwave's effect on abundance from its effect on uniform catchability, because the two occupy a flat direction of the fishery likelihood. This is not a bias to be bounded; it is an identification failure that follows from the form of the observation model, and the finite sample experiments show it operating in every cell of the design. The difficulty is more than theoretical. A recent analysis of 248 marine heatwaves across North American and European continental shelves found that their effects on demersal fish biomass were frequently indistinguishable from natural and sampling variability, and were not consistently associated with community reorganisation (Fredston et al., 2023). That result, obtained from fishery independent trawl surveys, sharpens the motivation for the present work: if a heatwave signal is hard to detect even in survey data collected under a fixed design, then reading it from commercial catch rates, where abundance is entangled with availability and catchability, is harder still. Our power results make the same point from the other side: a survey that is unbiased for the abundance effect still rejects a zero effect in only a minority of replicates at the station counts that make it better than the fishery.
+
+The constructive half of the framework is a mapping from confounding pathway to remedy, and the revised model makes that mapping sharper than the earlier version did. Availability change has a fishery only remedy: a spatially explicit standardisation whose density surface can move with the event recovers in frame abundance under redistribution, and the centre of gravity of that surface recovers the movement itself. Uniform catchability change has no fishery only remedy at all, because no covariate of the fishing operation observes it, and this is precisely the direction that a survey is needed to pin down. Spatially structured catchability sits between the two: it is identified from the fishery data, but it imitates redistribution in the fishery's own centre of gravity, and only the centre of gravity of an independent survey tells the two apart. That availability itself moves in complex ways during heatwaves is now well documented: modelling of fourteen top predators across four Northeast Pacific heatwaves found responses ranging from near total loss of habitat to a two fold increase, varying by species and by event (Welch et al., 2023), so the sign and magnitude of an availability driven CPUE signal cannot be assumed a priori. The bias induced by non random, preferential allocation of commercial effort is itself an active area of study: simulation work shows that fishery dependent sampling in proportion to biomass can, under favourable conditions, recover indices comparable to random sampling, but degrades once the spatial mismatch between effort and abundance becomes severe (Ducharme-Barth et al., 2022), and the difficulty of projecting distributions from such data has motivated dedicated methods (Karp et al., 2023). Our results are consistent with that literature and add the identifiability perspective.
+
+The survey deserves a more careful statement than "it recovers abundance". It bears emphasis that the survey helps not because it measures something other than catch per effort, but because its effort is allocated independently of abundance and its catchability is held fixed and known; a survey that sampled preferentially or let its catchability track the heatwave would be confounded in the same way as the fishery and would not restore identifiability. What a well designed survey of the frame recovers is in frame abundance. When an event moves biomass across the frame boundary, in frame and total abundance diverge by the frame share, and the survey, like the fishery, has no observation of the stock beyond the edge. Whether that matters depends on the management question: if the stock beyond the boundary is lost to the fishery and its management, in frame abundance is the right target and the survey is unbiased for it; if the boundary is an artefact of jurisdiction and the stock is expected to return, total abundance is the target and the survey will overstate a decline by the share that left. The earlier version of this work conflated the two, and the direction of its error was set by a refuge that never warmed. The practical recommendation is to decide which estimand a survey is meant to serve before it is designed, and to extend its frame beyond the historical range of the stock where the second question is the one being asked.
+
+A further reason the confound matters is that the two processes it entangles are themselves correlated in nature, not independent. Redistribution and abundance decline are widely treated as alternative interpretations of a falling local catch rate, one benign and one not, yet a global analysis of 2,572 marine fish population trends found that rapid poleward range shifts tend to coincide with local population declines rather than with stable abundance, so that a shifting stock is often also a declining one (Chaikin et al., 2024). If redistribution and decline travel together, then a CPUE change that appears to be "just" a distributional artefact may signal genuine loss, and the inability of a scalar index to tell them apart is not a conservative bias but a potentially dangerous one. This strengthens the case for the survey based diagnostics developed here, which estimate the two processes separately rather than forcing an analyst to guess which one a catch rate reflects.
+
+Two results run against expectations that the earlier version of this framework shared with much of the literature, and both are worth stating plainly. The first is that redistribution lowered nominal CPUE in every frame setting, including a closed frame in which biomass merely concentrates. The classical hyperstability signature, a catch rate that holds up while the stock contracts, requires a fleet that follows the stock into its contracted range; the fleet modelled here learns from last month's catch rates and so lags a stock that moves within a season, and the sensitivity analysis shows the artefact growing with the stock's movement rate and shrinking when the fleet contracts onto the cells it knows best. Hyperstability is a property of the fleet's response to the stock, not of redistribution as such, and an attribution exercise should characterise that response rather than assume either sign. The second is that an estimator which shares a month effect between fishery and survey observations, the natural form of an integrated index, loads the fishery's catchability change onto the shared effect and recovers only part of a decline; we fitted such an estimator in an earlier version and do not report it, because an integrated index helps only if the stream specific time effects are constrained in a way that the identifiability result shows cannot be learned from the data.
+
+Several limitations bound the claims. The operating model is a deliberately simplified world; its lattice, its single environmental driver and its thermal niche formulation are caricatures of a real fishery, chosen so that the truth is known rather than so that any particular stock is reproduced. The structural identifiability result is general, because it follows from the form of the observation model rather than from any parameter value, but the finite sample magnitudes, the station counts and frequencies, the specific error rates of the diagnostic key, are properties of this parameterisation and should be read as illustrative orders of magnitude rather than transferable constants. Catch does not deplete a cell locally, so hyperstability through the sequential depletion of aggregations cannot arise here; the two way delta model with cell and month fixed effects is an incidental parameters setting whose behaviour at this sparsity we have characterised empirically rather than theoretically; and the Newey–West intervals undercover somewhat at monthly frequency and badly at semiannual frequency, which we report rather than correct. The survey is idealised with known, equal inclusion probabilities and protocol fixed catchability; real surveys have their own catchability and design complications, which would raise the coverage required. And we have treated the four mechanisms as separable switches, whereas in a real heatwave they are driven by a common process and may be correlated in ways the factorial does not capture, as the co-occurrence of shift and decline noted above illustrates. Each of these is a direction for extension rather than a threat to the core argument, which rests on the identifiability structure and not on the details of the world.
+
+The framework applies directly to any fishery where a heatwave signal is being read from catch rates, and the natural next step is to instantiate it for a specific stock. Western Australian fisheries that experienced the 2010 to 2011 marine heatwave, driven by an anomalously strong Leeuwin Current during an extreme La Niña (Pearce and Feng, 2013; Feng et al., 2013), and Spanish mackerel in particular, offer a setting in which the operating model could be conditioned on real spatial structure, real effort and a real survey, turning the qualitative design guidance here into stock specific monitoring recommendations. That heatwave had documented and lasting consequences for the region's fished stocks, and early detection through fishery independent surveys was central to the management response (Caputi et al., 2016, 2019), which is exactly the kind of auxiliary information this framework identifies as necessary. That application is the subject of a companion study.
+
+## 6. Conclusion
+
+Catch per unit effort cannot, on its own, tell whether a marine heatwave made a stock decline, move or merely become harder to catch, and this is a property of the likelihood rather than a shortcoming of any standardisation. The way out is not a better model of the catch rate but a different kind of observation. A fishery independent survey with design allocated effort and protocol fixed catchability restores identifiability, is unbiased for the abundance inside its frame, and separates genuine movement from a warm edge catchability change through its centre of gravity; a spatially explicit standardisation of the fishery data recovers in frame abundance under redistribution but not under catchability change; and no index confined to the frame can see the share of a stock that an event moves beyond it. How much survey is needed is a quantitative question with an answer that depends on frequency more than on station count. For a management agency facing the next heatwave, the implication is that the data infrastructure to attribute its effect must be in place before the event, and that its frame, its frequency and the estimand it serves are design decisions that this framework can inform.
+
+## Data and code availability
+
+All code required to reproduce the operating model, the estimators, every experiment, every table and figure, and the manuscript itself is provided in a public repository, entirely in R. The complete analysis is reproduced by a single driver script with stage level caching; a quick mode reproduces the full pipeline at reduced replication for checking, and a test suite of forty checks covers the properties on which the results depend, including that observations are drawn from the state the estimand is defined on, that fishing mortality is non negative, that the fleet's contraction changes the allocation, and that the survey is unbiased for in frame abundance. Every number quoted in the text is evaluated from the results files when the manuscript is built.
+
+## References
+
+Afrifa-Yamoah, E., Awuah-Mensah, N., Bradshaw, C. J. A. and Mueller, U. (2026). Climate change impacts on fish-related ecosystem services. *Reviews in Fish Biology and Fisheries*, 36:51.
+
+Babcock, R. C., Bustamante, R. H., Fulton, E. A. et al. (2019). Severe continental-scale impacts of climate change are happening now: extreme climate events impact marine habitat forming communities along 45% of Australia's coast. *Frontiers in Marine Science*, 6:411.
+
+Caputi, N., Kangas, M., Denham, A., Feng, M., Pearce, A., Hetzel, Y. and Chandrapavan, A. (2016). Management adaptation of invertebrate fisheries to an extreme marine heat wave event at a global warming hot spot. *Ecology and Evolution*, 6(11):3583–3593.
+
+Caputi, N., Kangas, M., Chandrapavan, A., Hart, A., Feng, M., Marin, M. and de Lestang, S. (2019). Factors affecting the recovery of invertebrate stocks from the 2011 Western Australian extreme marine heatwave. *Frontiers in Marine Science*, 6:484.
+
+Chaikin, S., Riva, F., Marshall, K. E., Lessard, J.-P. and Belmaker, J. (2024). Marine fishes experiencing high-velocity range shifts may not be climate change winners. *Nature Ecology & Evolution*, 8(5):936–946.
+
+Cheung, W. W. L. and Frölicher, T. L. (2020). Marine heatwaves exacerbate climate change impacts for fisheries in the northeast Pacific. *Scientific Reports*, 10:6678.
+
+Ducharme-Barth, N. D., Grüss, A., Vincent, M. T., Kiyofuji, H., Aoki, Y., Pilling, G., Hampton, J. and Thorson, J. T. (2022). Impacts of fisheries-dependent spatial sampling patterns on catch-per-unit-effort standardization: a simulation study and fishery application. *Fisheries Research*, 246:106169.
+
+Erisman, B. E., Allen, L. G., Claisse, J. T., Pondella, D. J., Miller, E. F. and Murray, J. H. (2011). The illusion of plenty: hyperstability masks collapses in two recreational fisheries that target fish spawning aggregations. *Canadian Journal of Fisheries and Aquatic Sciences*, 68(10):1705–1716.
+
+Feng, M., McPhaden, M. J., Xie, S.-P. and Hafner, J. (2013). La Niña forces unprecedented Leeuwin Current warming in 2011. *Scientific Reports*, 3:1277.
+
+Fredston, A. L., Cheung, W. W. L., Frölicher, T. L. et al. (2023). Marine heatwaves are not a dominant driver of change in demersal fishes. *Nature*, 621(7978):324–329.
+
+Frölicher, T. L., Fischer, E. M. and Gruber, N. (2018). Marine heatwaves under global warming. *Nature*, 560(7718):360–364.
+
+Fuster-Alonso, A., Conesa, D., Pennino, M. G. et al. (2024). Spatio-temporal sampling designs and dependence: implications for abundance indices. *ICES Journal of Marine Science*, 81(5):984–995.
+
+Harley, S. J., Myers, R. A. and Dunn, A. (2001). Is catch-per-unit-effort proportional to abundance? *Canadian Journal of Fisheries and Aquatic Sciences*, 58(9):1760–1772.
+
+Hobday, A. J., Alexander, L. V., Perkins, S. E. et al. (2016). A hierarchical approach to defining marine heatwaves. *Progress in Oceanography*, 141:227–238.
+
+Hoyle, S. D., Campbell, R. A., Ducharme-Barth, N. D. et al. (2024). Catch per unit effort modelling for stock assessment: a summary of good practices. *Fisheries Research*, 269:106860.
+
+Karp, M. A., Brodie, S., Smith, J. A. et al. (2023). Projecting species distributions using fishery-dependent data. *Fish and Fisheries*, 24(1):71–92.
+
+Maunder, M. N. and Punt, A. E. (2004). Standardizing catch and effort data: a review of recent approaches. *Fisheries Research*, 70(2–3):141–159.
+
+Maunder, M. N., Sibert, J. R., Fonteneau, A., Hampton, J., Kleiber, P. and Harley, S. J. (2006). Interpreting catch per unit effort data to assess the status of individual stocks and communities. *ICES Journal of Marine Science*, 63(8):1373–1385.
+
+Maunder, M. N., Thorson, J. T., Xu, H. et al. (2020). The need for spatio-temporal modeling to determine catch-per-unit effort based indices of abundance and associated composition data for inclusion in stock assessment models. *Fisheries Research*, 229:105594.
+
+Oliver, E. C. J., Donat, M. G., Burrows, M. T. et al. (2018). Longer and more frequent marine heatwaves over the past century. *Nature Communications*, 9:1324.
+
+Pearce, A. F. and Feng, M. (2013). The rise and fall of the "marine heat wave" off Western Australia during the summer of 2010/2011. *Journal of Marine Systems*, 111–112:139–156.
+
+Smale, D. A., Wernberg, T., Oliver, E. C. J. et al. (2019). Marine heatwaves threaten global biodiversity and the provision of ecosystem services. *Nature Climate Change*, 9(4):306–312.
+
+Thorson, J. T. (2019). Guidance for decisions using the Vector Autoregressive Spatio-Temporal (VAST) package in stock, ecosystem, habitat and climate assessments. *Fisheries Research*, 210:143–161.
+
+Thorson, J. T., Shelton, A. O., Ward, E. J. and Skaug, H. J. (2015). Geostatistical delta-generalized linear mixed models improve precision for estimated abundance indices for West Coast groundfishes. *ICES Journal of Marine Science*, 72(5):1297–1310.
+
+Thorson, J. T., Maunder, M. N. and Punt, A. E. (2020). The development of spatio-temporal models of fishery catch-per-unit-effort data to derive indices of relative abundance. *Fisheries Research*, 230:105611.
+
+Thorson, J. T., Pinsky, M. L. and Ward, E. J. (2016a). Model-based inference for estimating shifts in species distribution, area occupied and centre of gravity. *Methods in Ecology and Evolution*, 7(8):990–1002.
+
+Thorson, J. T., Rindorf, A., Gao, J., Hanselman, D. H. and Winker, H. (2016b). Density-dependent changes in effective area occupied for sea-bottom-associated marine fishes. *Proceedings of the Royal Society B: Biological Sciences*, 283(1840):20161853.
+
+Thorson, J. T. and Barnett, L. A. K. (2017). Comparing estimates of abundance trends and distribution shifts using single- and multispecies models of fishes and biogenic habitat. *ICES Journal of Marine Science*, 74(5):1311–1321.
+
+Welch, H., Savoca, M. S., Brodie, S. et al. (2023). Impacts of marine heatwaves on top predator distributions are variable but predictable. *Nature Communications*, 14:5188.
+
+Wernberg, T., Bennett, S., Babcock, R. C. et al. (2016). Climate-driven regime shift of a temperate marine ecosystem. *Science*, 353(6295):169–172.
+
+Wernberg, T., Smale, D. A., Tuya, F., Thomsen, M. S., Langlois, T. J., de Bettignies, T., Bennett, S. and Rousseaux, C. S. (2013). An extreme climatic event alters marine ecosystem structure in a global biodiversity hotspot. *Nature Climate Change*, 3(1):78–82.
