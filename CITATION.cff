@@ -18,8 +18,11 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.23293721
     description: "Zenodo concept DOI, resolves to the latest version"
+  - type: doi
+    value: 10.5281/zenodo.23629610
+    description: "Zenodo version DOI for release 2.0.0"
 version: 2.0.0
-date-released: 2026-10-24
+date-released: 2026-10-25
 repository-code: https://github.com/EAfrifa-Yamoah/Simulation-Recovery-of-Heatwave-Effect-
 license: MIT
 keywords:
