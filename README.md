@@ -51,7 +51,6 @@ scripts/
   make_tables.R          all tables -> results/tables/*.md and *.csv
   make_figures.R         all figures -> figures/*.pdf and 300 dpi *.png (base graphics)
   make_tex_tables.R      LaTeX table bodies from results/tables/*.csv -> results/tables/tex/
-  assemble_manuscript.R  templates + table bodies -> manuscript/sim-rec_main.tex and sim-rec_supp.tex
   build_manuscript.R     manuscript.md -> manuscript_sim-rec_revised.docx via pandoc,
                          with every quoted number evaluated from results/
   build_latex.R          the same resolved source -> manuscript_sim-rec_revised.tex
@@ -60,14 +59,7 @@ scripts/
                          latexmk is present, the PDF
 tests/testthat/          62 checks, including the ones that would have caught the
                          bugs removed in version 2 (see RESPONSE_TO_REVIEW.md)
-manuscript/
-  main_template.tex      main text source (Fish and Fisheries); every quoted number and
-                         table body is inserted from results/ by assemble_manuscript.R
-  supp_template.tex      Supporting Information source
-  references.tex         reference list shared by both
-  sim-rec_main.tex, sim-rec_supp.tex   the assembled files to compile (latexmk -pdf)
-manuscript.md            source of the earlier Word draft (make doc, make tex); superseded by
-                         manuscript/main_template.tex and supp_template.tex
+manuscript.md            source of the Word draft (make doc, make tex)
 ```
 
 ## Reproduce
@@ -80,8 +72,7 @@ make quick       # the whole pipeline at small sizes (about 2 minutes)
 make run         # full run: ~12,000 replicates, ~1 hour on two cores
 make tables      # results/tables/
 make figures     # figures/
-make paper       # manuscript/build/sim-rec_main.pdf and sim-rec_supp.pdf
-make doc         # manuscript_sim-rec_revised.docx (earlier Word draft)
+make doc         # manuscript_sim-rec_revised.docx
 make tex         # manuscript_sim-rec_revised.tex (+ PDF via latexmk if installed)
 ```
 
@@ -97,7 +88,7 @@ Fixes to the simulation that followed a code level review: observations are now 
 
 ## Fish and Fisheries manuscript (October 2026)
 
-The manuscript is now maintained as LaTeX in `manuscript/main_template.tex` and `manuscript/supp_template.tex`, assembled by `scripts/assemble_manuscript.R` (`make paper`). Changes to code and results made with it:
+The LaTeX manuscript is not kept in this repository; it is available from the authors on request. Changes to code and results made with it:
 
 - Global sensitivity: the fleet contraction parameter `beta_J` was sampled over [-1.6, 0], a range that excluded the model's default (+0.8) and, below about -0.5, reversed the fleet's targeting. It is now sampled over [0, 1.6] (`SENS_RANGES` in `R/06_experiments.R`), and a test checks that every range contains its default. The sensitivity stage was rerun: contraction strength now has almost no effect on the nominal bias (SRC 0.004), which is governed mainly by uniform catchability loss (-0.58) and the number of events (-0.31).
 - Figures: Figure 4 (sampling distributions) read non-existent columns and drew no violins; fixed. Figures use `cairo_pdf` so degree signs render; titles were removed from inside panels; non-estimator elements use neutral colours so no estimator colour carries a second meaning; the combined sensitivity and identifiability figure is split into `fig11_identifiability` and `fig12_sensitivity`.
