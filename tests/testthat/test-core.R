@@ -138,3 +138,20 @@ test_that("sensitivity ranges contain the defaults and keep contraction non-nega
   # beta_J multiplies targeting strength; a negative value would reverse targeting
   expect_gte(SENS_RANGES$beta_J[1], 0)
 })
+
+test_that("without redistribution the paired contrast is zero before the first heatwave anomaly", {
+  cfg <- default_config(); grid <- make_grid(cfg); Tn <- cfg$n_months
+  for (seed in c(5, 11, 23)) {
+    set.seed(seed); sw <- scenario_switches("S1001")
+    ev <- draw_events(cfg); field <- sim_field(cfg, grid); eta <- rnorm(Tn, 0, cfg$sd_proc)
+    fleet <- draw_fleet(cfg, grid); parts <- temperature_parts(cfg, grid, ev, field)
+    rf_c <- refuge_suitability(cfg, parts, FALSE)
+    wf <- run_world(cfg, grid, sw, parts$base + parts$event, refuge_suitability(cfg, parts, TRUE),
+                    ev$J, eta, fleet, Tmat_base = parts$base, phi_out_base = rf_c)
+    wc <- run_world(cfg, grid, sw, parts$base, rf_c, rep(0, Tn), eta, fleet, E_fixed = wf$E,
+                    observe = FALSE, Tmat_base = parts$base, phi_out_base = rf_c)
+    first <- which(colSums(parts$event) > 0)[1]
+    expect_equal(wf$p_out[1], wc$p_out[1])
+    if (first > 2) expect_equal(wf$logN[1:(first - 1)], wc$logN[1:(first - 1)])
+  }
+})

@@ -131,7 +131,9 @@ coverage_summary <- function(cov, boot = 400) {
                empty_months = mean(d$surv_empty, na.rm = TRUE),
                n_estimable = sum(is.finite(d$beta_survey)),
                rmse_nominal = mk(d$beta_nominal)["rmse"], power_nominal = pn["power"],
+               cover_nominal = pn["coverage"],
                rmse_delta = mk(d$beta_delta)["rmse"], power_delta = pd["power"],
+               cover_delta = pd["coverage"],
                rmse_nochange = zero["rmse"], row.names = NULL)
   }))
 }
@@ -237,10 +239,13 @@ exp_temporal <- function(cfg, R = 150, seed0 = 909, L = 24, coverage = 0.20) {
     eta <- rnorm(Tn, 0, cfgL$sd_proc); fleet <- draw_fleet(cfgL, grid)
     parts <- temperature_parts(cfgL, grid, ev, field)
     J <- ev$J; I <- (J - mean(J)) / sd(J)
+    rf_c <- refuge_suitability(cfgL, parts, FALSE)
     wf <- run_world(cfgL, grid, sw, parts$base + parts$event,
-                    refuge_suitability(cfgL, parts, TRUE), J, eta, fleet)
-    wc <- run_world(cfgL, grid, sw, parts$base, refuge_suitability(cfgL, parts, FALSE),
-                    rep(0, Tn), eta, fleet, E_fixed = wf$E, observe = FALSE)
+                    refuge_suitability(cfgL, parts, TRUE), J, eta, fleet,
+                    Tmat_base = parts$base, phi_out_base = rf_c)
+    wc <- run_world(cfgL, grid, sw, parts$base, rf_c,
+                    rep(0, Tn), eta, fleet, E_fixed = wf$E, observe = FALSE,
+                    Tmat_base = parts$base, phi_out_base = rf_c)
     truth <- wf$logN - wc$logN
     surv <- simulate_survey(cfgL, grid, exp(wf$logN), wf$pi, coverage = coverage)
     sidx <- est_survey(surv, I, grid)$index

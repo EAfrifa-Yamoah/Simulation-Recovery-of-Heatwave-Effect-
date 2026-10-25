@@ -1,0 +1,20 @@
+using 2 core(s)
+=== identifiability (cached)
+=== factorial (cached)
+=== frame (cached)
+=== coverage (cached)
+=== matched (cached)
+=== temporal (cached)
+=== sensitivity === 18:48:16
+  sensitivity design point 20/200  18:48:43
+  sensitivity design point 40/200  18:49:09
+  sensitivity design point 60/200  18:49:39
+  sensitivity design point 80/200  18:50:09
+  sensitivity design point 100/200  18:50:35
+  sensitivity design point 120/200  18:51:05
+  sensitivity design point 140/200  18:51:35
+  sensitivity design point 160/200  18:52:04
+  sensitivity design point 180/200  18:52:33
+  sensitivity design point 200/200  18:53:03
+    done at 4.8 min
+all stages complete in 4.9 min

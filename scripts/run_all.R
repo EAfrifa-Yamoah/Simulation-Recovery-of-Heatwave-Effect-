@@ -25,11 +25,26 @@ if (nzchar(Sys.getenv("MHW_QUICK")))
              sens_design = 10, sens_R = 3, frame_R = 8)
 saveRDS(SZ, "results/run_sizes.rds")
 
+## cache key: run sizes, configuration and the R source; a cached stage whose
+## key differs is ignored and recomputed, so a quick run never reuses full
+## stages and a code change never leaves stale results in place
+cache_key <- function() {
+  src <- unlist(lapply(sort(list.files("R", full.names = TRUE)), readLines, warn = FALSE))
+  tf <- tempfile(); writeLines(c(deparse(SZ), deparse(cfg), src, R.version.string), tf)
+  on.exit(unlink(tf)); substr(unname(tools::md5sum(tf)), 1, 12)
+}
+KEY <- cache_key()
+writeLines(KEY, "results/parts/cache_key.txt")
 stage <- function(nm, expr) {
   path <- file.path("results/parts", paste0(nm, ".rds"))
-  if (file.exists(path)) { message("=== ", nm, " (cached)"); return(readRDS(path)) }
+  if (file.exists(path)) {
+    v <- readRDS(path)
+    if (identical(attr(v, "cache_key"), KEY)) { message("=== ", nm, " (cached)"); return(v) }
+    message("=== ", nm, " (cached copy has a different key; recomputing)")
+  }
   message("=== ", nm, " === ", format(Sys.time(), "%H:%M:%S"))
   v <- force(expr)
+  attr(v, "cache_key") <- KEY
   saveRDS(v, path)
   message("    done at ", round(as.numeric(Sys.time() - t_start, units = "mins"), 1), " min")
   v

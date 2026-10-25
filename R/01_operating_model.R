@@ -235,18 +235,22 @@ suitability <- function(Tmat, cfg) {
 
 #' Distribution shares with partial adjustment and an outside frame state.
 #' Returns a list with pi (S x T, summing to 1 - p_out each month) and p_out.
-distribution_shares <- function(phi, cfg, tracking, phi_out_t) {
+distribution_shares <- function(phi, cfg, tracking, phi_out_t,
+                                phi_base = phi, phi_out_base = phi_out_t) {
   S <- nrow(phi); Tn <- ncol(phi)
   if (length(phi_out_t) == 1) phi_out_t <- rep(phi_out_t, Tn)
+  if (length(phi_out_base) == 1) phi_out_base <- rep(phi_out_base, Tn)
 
   # the outside frame state represents one latitude band beyond the poleward
   # edge, so it carries the area weight of a band rather than of a single cell
   w_out <- cfg$n_shelf
 
   if (!tracking) {
-    # fixed climatological shares: no redistribution at all
-    base <- rowMeans(phi)
-    tot  <- sum(base) + w_out * mean(phi_out_t)
+    # fixed shares: the mean suitability over the series WITHOUT heatwaves
+    # (phi_base, phi_out_base), so that the factual and counterfactual runs use
+    # identical shares and no future event can enter the paired contrast
+    base <- rowMeans(phi_base)
+    tot  <- sum(base) + w_out * mean(phi_out_base)
     pi_s <- matrix(base / tot, S, Tn)
     p_out <- rep(1 - sum(base) / tot, Tn)
     return(list(pi = pi_s, p_out = p_out))

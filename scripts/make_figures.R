@@ -10,21 +10,23 @@ Sys.setlocale("LC_CTYPE", "C.UTF-8")   # so the degree sign in labels is read as
 for (f in list.files("R", full.names = TRUE)) source(f)
 dir.create("figures", showWarnings = FALSE)
 
-COL <- c(truth = "#000000", truth_in = "#7F7F7F", nominal = "#D55E00", naive = "#E69F00",
-         delta = "#0072B2", delta_fished = "#56B4E9", deltaint = "#CC79A7",
-         survey = "#009E73", event = "#F0E442")
+## One meaning per colour across the whole figure suite (Okabe-Ito palette).
+## The positive-only index and the fished-cells delta variant appear in tables
+## only, so their colours are not reserved.
+COL <- c(truth = "#000000", truth_in = "#E69F00", nominal = "#D55E00",
+         delta = "#0072B2", deltaint = "#CC79A7", survey = "#009E73", event = "#F0E442")
 LAB <- c(truth = "Truth (total abundance)", truth_in = "Truth (in-frame abundance)",
          nominal = "Nominal CPUE", naive = "Positive-only", delta = "Delta index",
          delta_fished = "Delta index, fished cells", deltaint = "Spatial delta index",
          survey = "Survey (design-based)")
 ## colours used only for elements that are not estimators, so that no estimator
 ## colour is reused with another meaning
-COL_NEUTRAL <- "#5F5F5F"; COL_LAG <- "#CC79A7"
+COL_NEUTRAL <- "#5F5F5F"; COL_LAG <- "#56B4E9"
 alpha <- function(col, a) { v <- col2rgb(col) / 255; rgb(v[1], v[2], v[3], a) }
 
 fig_open <- function(nm, w, h, oma_top = 0) {
-  cairo_pdf(file.path("figures", paste0(nm, ".pdf")), width = w, height = h, pointsize = 10)
-  par(family = "sans", mgp = c(2.1, 0.6, 0), tcl = -0.3, las = 1, cex.axis = 0.85,
+  cairo_pdf(file.path("figures", paste0(nm, ".pdf")), width = w, height = h, pointsize = 12)
+  par(family = "sans", mgp = c(2.3, 0.7, 0), tcl = -0.3, las = 1, cex.axis = 0.95, cex.lab = 1.05,
       oma = c(0, 0, oma_top, 0))
 }
 fig_close <- function(nm) {
@@ -69,10 +71,12 @@ example_world <- function(sc, seed) {
   ev <- draw_events(cfg); field <- sim_field(cfg, grid)
   eta <- rnorm(Tn, 0, cfg$sd_proc); fleet <- draw_fleet(cfg, grid)
   parts <- temperature_parts(cfg, grid, ev, field)
+  rf_c <- refuge_suitability(cfg, parts, FALSE)
   w <- run_world(cfg, grid, sw, parts$base + parts$event, refuge_suitability(cfg, parts, TRUE),
-                 ev$J, eta, fleet)
-  wc <- run_world(cfg, grid, sw, parts$base, refuge_suitability(cfg, parts, FALSE),
-                  rep(0, Tn), eta, fleet, E_fixed = w$E, observe = FALSE)
+                 ev$J, eta, fleet, Tmat_base = parts$base, phi_out_base = rf_c)
+  wc <- run_world(cfg, grid, sw, parts$base, rf_c,
+                  rep(0, Tn), eta, fleet, E_fixed = w$E, observe = FALSE,
+                  Tmat_base = parts$base, phi_out_base = rf_c)
   I <- (ev$J - mean(ev$J)) / sd(ev$J)
   list(w = w, wc = wc, ev = ev, I = I, T = parts$base + parts$event, sw = sw)
 }
@@ -151,7 +155,7 @@ fig3 <- function() {
     shade_events(1:Tn, ex$ev$J > 0)
     lines(1:Tn, nom, col = COL["nominal"], lwd = 1.1); lines(1:Tn, del, col = COL["delta"], lwd = 1.1)
     lines(1:Tn, su, col = COL["survey"], lwd = 1.1)
-    lines(1:Tn, tri, col = COL["truth_in"], lwd = 2, lty = 2); lines(1:Tn, tr, col = COL["truth"], lwd = 2.2)
+    lines(1:Tn, tri, col = COL["truth_in"], lwd = 2.4, lty = 2); lines(1:Tn, tr, col = COL["truth"], lwd = 2.4)
     abline(h = 0, col = "grey70", lwd = 0.6)
     panel(letters[k])
   }
@@ -159,7 +163,7 @@ fig3 <- function() {
   plot.new()
   legend("top", legend = LAB[c("truth", "truth_in", "nominal", "delta", "survey")],
          col = COL[c("truth", "truth_in", "nominal", "delta", "survey")],
-         lty = c(1, 2, 1, 1, 1), lwd = c(2.2, 2, 1.1, 1.1, 1.1), bty = "n", ncol = 5, cex = 0.82, xpd = NA)
+         lty = c(1, 2, 1, 1, 1), lwd = c(2.4, 2.4, 1.1, 1.1, 1.1), bty = "n", ncol = 5, cex = 0.85, xpd = NA)
   fig_close("fig3_trajectories")
 }
 
@@ -197,17 +201,17 @@ fig4 <- function() {
 
 # ---- Figure 5: effect by case, 2^3 biological cells with the fleet contraction on
 fig5 <- function() {
-  scen <- c("S0001", "S1001", "S0101", "S0011", "S1101", "S1011", "S0111", "S1111")
-  lab <- c("None", "Abund.", "Redist.", "Catch.", "Ab+Re", "Ab+Ca", "Re+Ca", "All 3")
-  keys <- c("nominal", "delta", "delta_fished", "survey")
-  cols <- c("beta_nominal", "beta_delta", "beta_delta_fished", "beta_survey")
-  fig_open("fig5_effect_by_case", 9, 4.6)
+  scen <- c("S0001", "S1001", "S0101", "S0011", "S1101", "S1011", "S0111", "S1111", "SPQ1", "SPQT1")
+  lab <- c("None", "Ab", "Re", "Ca", "Ab+Re", "Ab+Ca", "Re+Ca", "Ab+Re+Ca", "WE", "WE+Re")
+  keys <- c("nominal", "delta", "deltaint", "survey")
+  cols <- c("beta_nominal", "beta_delta", "beta_deltaint", "beta_survey")
+  fig_open("fig5_effect_by_case", 10, 5.2, oma_top = 2.2)
   par(mar = c(3.4, 4.4, 1.2, 0.6))
   st <- lapply(cols, function(cc) t(sapply(scen, function(sc) { v <- fac[[cc]][fac$scenario == sc]; v <- v[is.finite(v)]
     c(mean(v), quantile(v, c(.025, .975))) })))
   rng <- range(unlist(st), fac$beta_cf[fac$scenario %in% scen], na.rm = TRUE)
   x <- seq_along(scen); w <- 0.17
-  plot(NA, xlim = c(0.5, 8.5), ylim = rng, xaxt = "n", xlab = "", ylab = "heatwave coefficient")
+  plot(NA, xlim = c(0.5, length(scen) + 0.5), ylim = rng, xaxt = "n", xlab = "", ylab = "heatwave coefficient")
   axis(1, at = x, labels = lab); abline(h = 0, lwd = 0.8)
   for (j in seq_along(keys)) {
     off <- (j - (length(keys) + 1) / 2) * w
@@ -217,11 +221,12 @@ fig5 <- function() {
   tt <- sapply(scen, function(sc) mean(fac$beta_cf[fac$scenario == sc]))
   ti <- sapply(scen, function(sc) mean(fac$beta_cf_in[fac$scenario == sc]))
   segments(x - 0.42, tt, x + 0.42, tt, lwd = 2.6, col = COL["truth"])
-  segments(x - 0.42, ti, x + 0.42, ti, lwd = 2, lty = 2, col = COL["truth_in"])
-  legend("bottomleft", legend = c(LAB[keys], LAB["truth"], LAB["truth_in"]),
+  segments(x - 0.42, ti, x + 0.42, ti, lwd = 2.4, lty = 2, col = COL["truth_in"])
+  par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0.2, 0), new = TRUE); plot.new()
+  legend("top", legend = c(LAB[keys], LAB["truth"], LAB["truth_in"]),
          fill = c(COL[keys], NA, NA), border = NA, lty = c(NA, NA, NA, NA, 1, 2),
-         lwd = c(NA, NA, NA, NA, 2.6, 2), col = c(rep(NA, 4), COL["truth"], COL["truth_in"]),
-         bty = "n", ncol = 2, cex = 0.8)
+         lwd = c(NA, NA, NA, NA, 2.6, 2.4), col = c(rep(NA, 4), COL["truth"], COL["truth_in"]),
+         bty = "n", ncol = 3, cex = 0.85, xpd = NA)
   fig_close("fig5_effect_by_case")
 }
 
@@ -360,7 +365,7 @@ fig10 <- function() {
   fr <- readRDS("results/frame.rds")
   scen <- c("S0101", "S1101"); lab <- c("Redistribution", "Abundance + redistribution")
   frames <- c("closed", "open_static", "open_dynamic"); fl <- c("closed frame", "open, static refuge", "open, warming refuge")
-  fig_open("fig10_frame_geometry", 9.2, 4.5, oma_top = 2.4)
+  fig_open("fig10_frame_geometry", 9.2, 4.8, oma_top = 3.2)
   par(mfrow = c(1, 2), mar = c(4.2, 3.8, 2.6, 0.6))
   for (k in 1:2) {
     st <- sapply(frames, function(fm) { d <- fr[fr$frame == fm & fr$scenario == scen[k], ]
@@ -368,18 +373,20 @@ fig10 <- function() {
         tt = mean(d$beta_cf), ti = mean(d$beta_cf_in)) })
     rng <- range(st, 0); x <- 1:3; w <- 0.24
     plot(NA, xlim = c(0.5, 3.5), ylim = rng, xaxt = "n", xlab = "", ylab = "heatwave coefficient")
-    axis(1, at = x, labels = fl, cex.axis = 0.8); abline(h = 0, lwd = 0.8)
+    axis(1, at = x, labels = FALSE)
+    text(x, par("usr")[3] - 0.045 * diff(par("usr")[3:4]), labels = c("closed\nframe", "open,\nstatic refuge", "open,\nwarming refuge"), adj = c(0.5, 1), xpd = NA, cex = 0.8)
+    abline(h = 0, lwd = 0.8)
     rect(x - 1.5 * w, 0, x - 0.5 * w, st["nom", ], col = COL["nominal"], border = NA)
     rect(x - 0.5 * w, 0, x + 0.5 * w, st["del", ], col = COL["delta"], border = NA)
     rect(x + 0.5 * w, 0, x + 1.5 * w, st["sur", ], col = COL["survey"], border = NA)
     segments(x - 0.45, st["tt", ], x + 0.45, st["tt", ], lwd = 2.6, col = COL["truth"])
-    segments(x - 0.45, st["ti", ], x + 0.45, st["ti", ], lwd = 2, lty = 2, col = COL["truth_in"])
+    segments(x - 0.45, st["ti", ], x + 0.45, st["ti", ], lwd = 2.4, lty = 2, col = COL["truth_in"])
     panel(letters[k])
   }
   par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0.2, 0), new = TRUE); plot.new()
   legend("top", legend = c(LAB[c("nominal", "delta", "survey")], LAB["truth"], LAB["truth_in"]),
          fill = c(COL[c("nominal", "delta", "survey")], NA, NA), border = NA, lty = c(NA, NA, NA, 1, 2),
-         lwd = c(NA, NA, NA, 2.6, 2), col = c(NA, NA, NA, COL["truth"], COL["truth_in"]), bty = "n", ncol = 5, cex = 0.78, xpd = NA)
+         lwd = c(NA, NA, NA, 2.6, 2.4), col = c(NA, NA, NA, COL["truth"], COL["truth_in"]), bty = "n", ncol = 3, cex = 0.85, xpd = NA)
   fig_close("fig10_frame_geometry")
 }
 
