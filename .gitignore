@@ -16,8 +16,5 @@ results/run.log
 
 # OS
 .DS_Store
-
-# LaTeX build directory (make paper)
-manuscript/build/
 # LaTeX build of the Word draft (make tex)
 results/latex/

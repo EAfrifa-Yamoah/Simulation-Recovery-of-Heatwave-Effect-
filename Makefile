@@ -1,7 +1,7 @@
 # Everything runs in R. See README.
-.PHONY: all run tables figures paper doc tex test quick clean
+.PHONY: all run tables figures doc tex test quick clean
 
-all: run tables figures paper
+all: run tables figures
 
 run:
 	Rscript scripts/run_all.R
@@ -14,12 +14,6 @@ tables:
 
 figures:
 	Rscript scripts/make_figures.R
-
-paper: tables figures
-	Rscript scripts/make_tex_tables.R
-	Rscript scripts/assemble_manuscript.R
-	cd manuscript && latexmk -pdf -interaction=nonstopmode -outdir=build sim-rec_main.tex
-	cd manuscript && latexmk -pdf -interaction=nonstopmode -outdir=build sim-rec_supp.tex
 
 doc:
 	Rscript scripts/build_manuscript.R
